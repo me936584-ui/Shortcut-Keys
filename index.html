@@ -38,8 +38,6 @@ body {
   overflow-x: hidden;
 }
 
-/* dot pattern removed for performance */
-
 body::after {
   content:'';
   position:fixed; top:0; left:0; right:0; height:3px;
@@ -47,7 +45,6 @@ body::after {
   z-index:100;
 }
 
-/* ── KEYBOARD SECTION (3 columns: left info | keyboard | right info) ── */
 .keyboard-section {
   position: sticky;
   top: 0;
@@ -64,7 +61,6 @@ body::after {
   gap: 16px;
 }
 
-/* subtle radial glow */
 .keyboard-section::before {
   content:'';
   position:absolute; inset:0;
@@ -72,7 +68,6 @@ body::after {
   pointer-events:none;
 }
 
-/* LEFT PANEL */
 .kb-side-left {
   flex: 1;
   display: flex;
@@ -116,7 +111,6 @@ body::after {
   letter-spacing: 0.5px;
 }
 
-/* RIGHT PANEL */
 .kb-side-right {
   flex: 1;
   display: flex;
@@ -171,7 +165,6 @@ body::after {
 }
 
 .kb-shell {
-  /* Gradient background: white top-left → light blue bottom-right */
   background: linear-gradient(135deg, #ffffff 0%, #e8eef8 40%, #c5d3ec 75%, #8eaad8 100%);
   border: 1px solid var(--border2);
   border-bottom: 4px solid rgba(28,69,135,0.25);
@@ -191,9 +184,6 @@ body::after {
   overflow: hidden;
 }
 
-/* watermark removed for performance */
-
-/* make all direct children sit above the watermark */
 .kb-shell > * {
   position: relative;
   z-index: 1;
@@ -368,6 +358,15 @@ body::after {
   text-align: right;
 }
 
+.note-orange {
+  display: block;
+  font-size: 0.85rem;
+  color: #b45309;
+  font-weight: 700;
+  margin-top: 2px;
+  text-align: right;
+}
+
 .shortcut-item.important {
   background: transparent;
   border-color: transparent;
@@ -436,8 +435,6 @@ body::after {
 .plus-sign { color:var(--text-dimmer); font-size:0.8rem; font-family:'Cairo',sans-serif; }
 .divider   { width:1px; height:18px; background:var(--border); flex-shrink:0; }
 
-/* watermark css removed */
-
 .footer {
   position:relative; z-index:10; margin-top:56px;
   font-family:'JetBrains Mono',monospace;
@@ -462,10 +459,8 @@ body::after {
 </head>
 <body>
 
-<!-- KEYBOARD SECTION: left info | keyboard | right info -->
 <div class="keyboard-section">
 
-  <!-- LEFT: clock + Tasks Tracker -->
   <div class="kb-side-left">
     <div class="ksr-clock" id="clock"></div>
     <div class="ksr-company">
@@ -476,7 +471,6 @@ body::after {
   </div>
   <div class="kb-shell" id="shell"></div>
 
-  <!-- RIGHT: METI + company -->
   <div class="kb-side-right">
     <div class="ksl-logo">METI</div>
     <div class="ksl-divider" style="align-self:flex-end;"></div>
@@ -571,9 +565,6 @@ enterEl.style.cssText=`width:65px;height:${U*2+G}px;margin-left:-8px;
   display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;`;
 enterEl.innerHTML=`<span class="enter-arrow" style="font-size:15px;font-weight:700;color:#1c4587;">↵</span><span class="enter-lbl" style="font-size:8px;font-weight:600;color:#1c4587;">Enter</span>`;
 
-// Override lit for Enter manually since clip-path cuts glow
-const origAdd = enterEl.classList.add.bind(enterEl.classList);
-const origRemove = enterEl.classList.remove.bind(enterEl.classList);
 enterEl._litOverride = function(on){
   if(on){
     enterEl.style.background='#1c4587';
@@ -646,17 +637,11 @@ const shortcuts=[
     {keysText:'Ctrl + Enter',codes:['ControlRight','Enter'],desc:'بيعمل Check Mark علامه الصح للـ Object',en:'Check Mark'},
     {keysText:'Esc',codes:['Escape'],desc:'تقدر تطلع من Select الـ Object',en:'Exit'},
   ]},
-  {cat:'Delete',catImportant:true,catBadge:'Daily Use',items:[
-    {keysText:'Delete',codes:['Delete'],desc:'بيمسح الـ Frames من بعد اخر Keyframe<span class="note-red">لو بين 2 Keyframes مش هيتمسح الـ frames اللي بينها</span>',en:'Delete Frame'},
-    {keysText:'Ctrl + Shift + Delete',codes:['ControlRight','ShiftRight','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
-  ]},
-  {cat:'Camera',items:[
+  {cat:'Movement Camera',items:[
     {keysText:'R',codes:['KeyR'],desc:'فتح الكاميرا',en:'Open Camera'},
     {keysText:'[',codes:['BracketLeft'],desc:'نقل من كاميرا لكاميرا (شمال)',en:'Prev Camera'},
     {keysText:']',codes:['BracketRight'],desc:'نقل من كاميرا لكاميرا (يمين)',en:'Next Camera'},
     {keysText:'\\',codes:['Backslash'],desc:'Track Projection لرؤية الـ Box الأصفر اللي في الصوره',en:'Track Projection'},
-  ]},
-  {cat:'Movement Camera',items:[
     {keysText:'C',codes:['KeyC'],desc:'هينقلك للـ AV و لو عامل Select علي Object هينقلك عليه',en:'Go To AV Or Object',important:true},
     {keysText:'W',codes:['KeyW'],desc:'تحرك لقدام',en:'Forward'},
     {keysText:'S',codes:['KeyS'],desc:'تحرك لورا',en:'Backward'},
@@ -666,13 +651,26 @@ const shortcuts=[
     {keysText:'Q',codes:['KeyQ'],desc:'بتطلع بالرويه الـ 3D لفوق',en:'Move Camera Up',important:true},
     {keysText:'~',codes:['Backquote'],desc:'تنقل من 2D لـ 3D',en:'Toggle View'},
   ]},
+  {cat:'Frames',catImportant:true,catBadge:'Daily Use',items:[
+    {keysText:'>',codes:['Period'],desc:'تقدم Frame',en:'Next Frame'},
+    {keysText:'Shift + >',codes:['ShiftRight','Period'],desc:'يقدمك 5 Frames',en:'+5 Frames'},
+    {keysText:'<',codes:['Comma'],desc:'ترجع Frame',en:'Prev Frame'},
+    {keysText:'Shift + <',codes:['ShiftRight','Comma'],desc:'يرجعك 5 Frames',en:'-5 Frames'},
+    {keysText:'K',codes:['KeyK'],desc:'تزود أو تشيل Key Frame',en:'Toggle Keyframe'},
+    {keysText:'Ctrl + >',codes:['ControlRight','Period'],desc:'تقدم للـ Frame اللي جاي',en:'Jump Forward'},
+    {keysText:'Ctrl + <',codes:['ControlRight','Comma'],desc:'ترجع للـ Frame اللي فات',en:'Jump Backward'},
+    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltRight','KeyK'],desc:'يشيل كل الـ Frames ما عدا اللي إنت واقف عنده',en:'Clear Frames'},
+  ]},
   {cat:'Object',items:[
+    {keysText:'P',codes:['KeyP'],desc:'عشان تعمل الـ Zone',en:'Create Zone',important:true},
+    {keysText:'G',codes:['KeyG'],desc:'هيخلي الـ Box علي قد النقط<span class="note-orange">بيسرع الشغل بس تأكد بعد ما تستخدمه</span>',en:'Fit To Points',important:true},
     {keysText:'B',codes:['KeyB'],desc:'عشان تقدر تعمل Box',en:'Create Box',important:true},
     {keysText:'T',codes:['KeyT'],desc:'تغير الاتجاهات للـ Objects',en:'Set Direction',important:true},
     {keysText:'Z',codes:['KeyZ'],desc:'يكبر Size الـ object 10cm من فوق',en:'Scale Up Top',important:true},
     {keysText:'Alt + Z',codes:['AltLeft','KeyZ'],desc:'يقلل Size الـ object 10cm من فوق',en:'Scale Down Top',important:true},
     {keysText:'X',codes:['KeyX'],desc:'يكبر Size الـ object 10cm من تحت',en:'Scale Up Bottom',important:true},
     {keysText:'Alt + X',codes:['AltLeft','KeyX'],desc:'يقلل Size الـ object 10cm من تحت',en:'Scale Down Bottom',important:true},
+    {keysText:'Shift + H',codes:['ShiftLeft','KeyH'],desc:'بتظبط طول الـ Object<span class="note-red">لو النقط خرجت برا الـ Box مش معناها نطول الـ Box ـ معناها نحرك الـ Box بنستخدم N / Shift+N</span>',en:'Fit Height',important:true},
     {keysText:'N',codes:['KeyN'],desc:'ينزل الـ Object كله لتحت',en:'Move Down',important:true},
     {keysText:'Shift + N',codes:['ShiftRight','KeyN'],desc:'يطلع الـ Object كله لفوق',en:'Move Up',important:true},
     {keysText:'▲',codes:['ArrowUp'],desc:'بيحرك الـ Object لقدام',en:'Forward'},
@@ -690,15 +688,9 @@ const shortcuts=[
     {keysText:'H',codes:['KeyH'],desc:'بيميل البوكس شمال 3D',en:'Tilt Left'},
     {keysText:'J',codes:['KeyJ'],desc:'بيميل البوكس يمين 3D',en:'Tilt Right'},
   ]},
-  {cat:'Frames',catImportant:true,catBadge:'Daily Use',items:[
-    {keysText:'>',codes:['Period'],desc:'تقدم Frame',en:'Next Frame'},
-    {keysText:'Shift + >',codes:['ShiftRight','Period'],desc:'يقدمك 5 Frames',en:'+5 Frames'},
-    {keysText:'<',codes:['Comma'],desc:'ترجع Frame',en:'Prev Frame'},
-    {keysText:'Shift + <',codes:['ShiftRight','Comma'],desc:'يرجعك 5 Frames',en:'-5 Frames'},
-    {keysText:'K',codes:['KeyK'],desc:'تزود أو تشيل Key Frame',en:'Toggle Keyframe'},
-    {keysText:'Ctrl + >',codes:['ControlRight','Period'],desc:'تقدم للـ Frame اللي جاي',en:'Jump Forward'},
-    {keysText:'Ctrl + <',codes:['ControlRight','Comma'],desc:'ترجع للـ Frame اللي فات',en:'Jump Backward'},
-    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltRight','KeyK'],desc:'يشيل كل الـ Frames ما عدا اللي إنت واقف عنده',en:'Clear Frames'},
+  {cat:'Delete',catImportant:true,catBadge:'Daily Use',items:[
+    {keysText:'Delete',codes:['Delete'],desc:'بيمسح الـ Frames من بعد اخر Keyframe<span class="note-red">لو بين 2 Keyframes مش هيتمسح الـ frames اللي بينها</span>',en:'Delete Frame'},
+    {keysText:'Ctrl + Shift + Delete',codes:['ControlRight','ShiftRight','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
   ]},
 ];
 
@@ -774,7 +766,7 @@ function scaleKeyboard(){
   shell.style.transformOrigin = 'top center';
   shell.style.marginBottom = `-${Math.round(shell.scrollHeight * (1 - scale))}px`;
 }
-// Clock
+
 function updateClock(){
   const el2 = document.getElementById('clock');
   if(el2) el2.textContent = new Date().toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
