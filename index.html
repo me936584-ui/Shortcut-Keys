@@ -321,7 +321,7 @@ body::after {
   box-shadow: 0 4px 32px rgba(28,69,135,0.08);
   opacity: 1;
   animation: none;
-  direction: ltr;
+  direction: rtl;
 }
 .big-card::before {
   content:'';
@@ -339,6 +339,7 @@ body::after {
   background: linear-gradient(90deg, #f0f5ff, #fafcff);
   border-bottom: 1px solid var(--border);
   position: relative;
+  direction: ltr;
 }
 .cat-label::before {
   content:'';
@@ -376,7 +377,7 @@ body::after {
   padding: 10px 14px; border-radius:8px;
   border:1px solid transparent; cursor:pointer;
   transition:all 0.12s ease;
-  direction:ltr;
+  direction:rtl;
 }
 .shortcut-item:hover { background:#f0f6ff; border-color:rgba(28,69,135,0.12); }
 
@@ -801,7 +802,10 @@ shortcuts.forEach((cat)=>{
 });
 listEl.appendChild(listFrag);
 
+const activeKeys = new Set();
+
 window.addEventListener('keydown',e=>{
+  activeKeys.add(e.code);
   const k = keyMap[e.code];
   if(k){
     if(k._litOverride) k._litOverride(true);
@@ -812,6 +816,7 @@ window.addEventListener('keydown',e=>{
   });
 });
 window.addEventListener('keyup',e=>{
+  activeKeys.delete(e.code);
   const k = keyMap[e.code];
   if(k){
     if(k._litOverride) k._litOverride(false);
