@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اختصارات لوحة المفاتيح</title>
+<title>Gulp Shortcuts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
@@ -38,13 +38,7 @@ body {
   overflow-x: hidden;
 }
 
-body::before {
-  content:'';
-  position:fixed; inset:0;
-  background-image: radial-gradient(circle, rgba(28,69,135,0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events:none; z-index:0;
-}
+/* dot pattern removed for performance */
 
 body::after {
   content:'';
@@ -197,23 +191,7 @@ body::after {
   overflow: hidden;
 }
 
-/* METI watermark text behind the keyboard */
-.kb-shell::before {
-  content: 'METI';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 140px;
-  letter-spacing: 24px;
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(28, 69, 135, 0.13);
-  pointer-events: none;
-  z-index: 0;
-  white-space: nowrap;
-  user-select: none;
-}
+/* watermark removed for performance */
 
 /* make all direct children sit above the watermark */
 .kb-shell > * {
@@ -241,7 +219,6 @@ body::after {
   user-select:none; flex-shrink:0; cursor:default;
   transition: all 0.09s ease;
   line-height:1.2; position:relative; overflow:hidden;
-  backdrop-filter: blur(4px);
 }
 .k.gk { width:auto !important; height:auto !important; flex-shrink:1; }
 
@@ -459,20 +436,7 @@ body::after {
 .plus-sign { color:var(--text-dimmer); font-size:0.8rem; font-family:'Cairo',sans-serif; }
 .divider   { width:1px; height:18px; background:var(--border); flex-shrink:0; }
 
-.watermark {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Cairo', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 4px;
-  color: rgba(28,69,135,0.55);
-  pointer-events: none;
-  z-index: 999;
-  white-space: nowrap;
-}
+/* watermark css removed */
 
 .footer {
   position:relative; z-index:10; margin-top:56px;
@@ -484,7 +448,6 @@ body::after {
 
 @keyframes fadeDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
 @keyframes fadeUp   { from{opacity:0;transform:translateY(10px)}  to{opacity:1;transform:none} }
-@keyframes expandX  { from{width:0;opacity:0} to{width:80px;opacity:1} }
 
 ::-webkit-scrollbar { width:5px; height:5px; }
 ::-webkit-scrollbar-track { background:transparent; }
@@ -509,7 +472,7 @@ body::after {
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       Micro Engineering Tech Inc.
     </div>
-    <button class="ksr-btn">Tasks Tracker</button>
+    <button class="ksr-btn">Gulp Shortcuts</button>
   </div>
   <div class="kb-shell" id="shell"></div>
 
@@ -669,37 +632,8 @@ navWrapper.appendChild(nk(1,6,'mod center',XL('◀'),'ArrowLeft'));
 navWrapper.appendChild(nk(2,6,'mod center',XL('▼'),'ArrowDown'));
 navWrapper.appendChild(nk(3,6,'mod center',XL('▶'),'ArrowRight'));
 
-const numpadWrapper=document.createElement('div');
-numpadWrapper.style.cssText=`display:grid;grid-template-columns:repeat(4,${U}px);grid-template-rows:repeat(5,${U}px);gap:${G}px;`;
-function gk(col,row,colSpan,rowSpan,cls,html,code){
-  const e=el('div','k gk'+(cls?' '+cls:''));
-  e.style.gridColumn=colSpan>1?`${col} / span ${colSpan}`:String(col);
-  e.style.gridRow=rowSpan>1?`${row} / span ${rowSpan}`:String(row);
-  e.style.width='auto';e.style.height='auto';
-  if(html!==undefined)e.innerHTML=html;
-  if(code){Array.isArray(code)?code.forEach(c=>keyMap[c]=e):keyMap[code]=e;}
-  return e;
-}
-numpadWrapper.appendChild(gk(1,1,1,1,'mod',XS('Num')+LG('Lock'),'NumLock'));
-numpadWrapper.appendChild(gk(2,1,1,1,'mod center',LG('/'),'NumpadDivide'));
-numpadWrapper.appendChild(gk(3,1,1,1,'mod center',LG('*'),'NumpadMultiply'));
-numpadWrapper.appendChild(gk(4,1,1,1,'mod center',LG('−'),'NumpadSubtract'));
-numpadWrapper.appendChild(gk(1,2,1,1,'',CK('Home','7'),'Numpad7'));
-numpadWrapper.appendChild(gk(2,2,1,1,'',CK('↑','8'),'Numpad8'));
-numpadWrapper.appendChild(gk(3,2,1,1,'',CK('PgUp','9'),'Numpad9'));
-numpadWrapper.appendChild(gk(4,2,1,2,'mod center',LG('+'),'NumpadAdd'));
-numpadWrapper.appendChild(gk(1,3,1,1,'',CK('←','4'),'Numpad4'));
-numpadWrapper.appendChild(gk(2,3,1,1,'center',CK('','5'),'Numpad5'));
-numpadWrapper.appendChild(gk(3,3,1,1,'',CK('→','6'),'Numpad6'));
-numpadWrapper.appendChild(gk(1,4,1,1,'',CK('End','1'),'Numpad1'));
-numpadWrapper.appendChild(gk(2,4,1,1,'',CK('↓','2'),'Numpad2'));
-numpadWrapper.appendChild(gk(3,4,1,1,'',CK('PgDn','3'),'Numpad3'));
-numpadWrapper.appendChild(gk(4,4,1,2,'mod center',LG('Enter'),'NumpadEnter'));
-numpadWrapper.appendChild(gk(1,5,2,1,'',CK('Ins','0'),'Numpad0'));
-numpadWrapper.appendChild(gk(3,5,1,1,'',CK('Del','.'),'NumpadDecimal'));
-
 const bodyRow=el('div','kb-body-row');
-bodyRow.appendChild(mainWrapper);bodyRow.appendChild(navWrapper);bodyRow.appendChild(numpadWrapper);
+bodyRow.appendChild(mainWrapper);bodyRow.appendChild(navWrapper);
 shell.appendChild(topRow);shell.appendChild(bodyRow);
 
 const shortcuts=[
@@ -781,12 +715,14 @@ function buildKeyBadge(keyText){
 }
 
 const listEl=document.getElementById('list');
-shortcuts.forEach((cat,ci)=>{
+const listFrag=document.createDocumentFragment();
+shortcuts.forEach((cat)=>{
   const section=el('div','cat-section');
   const label=el('div','cat-label'+(cat.catImportant?' gold':''));
   label.innerHTML=`<div class="cat-name">${cat.cat}</div>${cat.catBadge?`<span class="cat-badge">${cat.catBadge}</span>`:''}`;
   section.appendChild(label);
   const wrapper=el('div','items-wrapper');
+  const wFrag=document.createDocumentFragment();
   cat.items.forEach(item=>{
     const div=el('div','shortcut-item'+(item.important?' important':''));
     const descContent = highlightEnglish(item.desc);
@@ -795,20 +731,20 @@ shortcuts.forEach((cat,ci)=>{
       : `<div class="desc">${descContent}</div>`;
     div.innerHTML=`${descHtml}<span class="en-tag">${item.en}</span><div class="divider"></div><div class="keys-combo">${buildKeyBadge(item.keysText)}</div>`;
     div.addEventListener('mouseenter',()=>item.codes.forEach(c=>{
-      const k=keyMap[c];
-      if(!k) return;
-      if(k._litOverride) k._litOverride(true); else k.classList.add('lit');
+      const k=keyMap[c];if(!k)return;
+      if(k._litOverride)k._litOverride(true);else k.classList.add('lit');
     }));
     div.addEventListener('mouseleave',()=>item.codes.forEach(c=>{
-      const k=keyMap[c];
-      if(!k) return;
-      if(k._litOverride) k._litOverride(false); else k.classList.remove('lit');
+      const k=keyMap[c];if(!k)return;
+      if(k._litOverride)k._litOverride(false);else k.classList.remove('lit');
     }));
-    wrapper.appendChild(div);
+    wFrag.appendChild(div);
   });
+  wrapper.appendChild(wFrag);
   section.appendChild(wrapper);
-  listEl.appendChild(section);
+  listFrag.appendChild(section);
 });
+listEl.appendChild(listFrag);
 
 window.addEventListener('keydown',e=>{
   const k = keyMap[e.code];
