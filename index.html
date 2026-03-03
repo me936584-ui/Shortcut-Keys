@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gulp Shortcuts</title>
+<title>Lidar Shortcuts In Gulp</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
@@ -53,12 +53,29 @@ body::after {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 12px 20px;
+  padding: 12px 20px 12px;
   animation: none;
   background: linear-gradient(135deg, #1c4587 0%, #1a3d7a 60%, #163268 100%);
   box-shadow: 0 4px 24px rgba(0,0,0,0.3);
   overflow: hidden;
   gap: 16px;
+  flex-wrap: wrap;
+}
+
+.kb-header {
+  width: 100%;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  background: linear-gradient(90deg, #4a7fd4, #a8c8ff, #4a7fd4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  padding: 6px 0 2px;
+  order: -1;
 }
 
 .keyboard-section::before {
@@ -460,6 +477,7 @@ body::after {
 <body>
 
 <div class="keyboard-section">
+  <div class="kb-header">Lidar Shortcuts In Gulp</div>
 
   <div class="kb-side-left">
     <div class="ksr-clock" id="clock"></div>
@@ -467,7 +485,7 @@ body::after {
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       Micro Engineering Tech Inc.
     </div>
-    <button class="ksr-btn">Gulp Shortcuts</button>
+    <div style="font-family:'Cairo',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:1px;color:#1c4587;background:#ffffff;border-radius:10px;padding:8px 18px;white-space:nowrap;">Lidar Shortcuts In Gulp</div>
   </div>
   <div class="kb-shell" id="shell"></div>
 
@@ -663,14 +681,14 @@ const shortcuts=[
   ]},
   {cat:'Object',items:[
     {keysText:'P',codes:['KeyP'],desc:'عشان تعمل الـ Zone',en:'Create Zone',important:true},
-    {keysText:'G',codes:['KeyG'],desc:'هيخلي الـ Box علي قد النقط<span class="note-orange">بيسرع الشغل بس تأكد بعد ما تستخدمه</span>',en:'Fit To Points',important:true},
+    {keysText:'G',codes:['KeyG'],desc:'هيخلي الـ Box علي قد النقط<span class="note-orange">بيسرع الشغل بس تأكد بعد ما تستخدمه ان النقط جوا الـ Box</span>',en:'Fit To Points',important:true},
     {keysText:'B',codes:['KeyB'],desc:'عشان تقدر تعمل Box',en:'Create Box',important:true},
     {keysText:'T',codes:['KeyT'],desc:'تغير الاتجاهات للـ Objects',en:'Set Direction',important:true},
     {keysText:'Z',codes:['KeyZ'],desc:'يكبر Size الـ object 10cm من فوق',en:'Scale Up Top',important:true},
     {keysText:'Alt + Z',codes:['AltLeft','KeyZ'],desc:'يقلل Size الـ object 10cm من فوق',en:'Scale Down Top',important:true},
     {keysText:'X',codes:['KeyX'],desc:'يكبر Size الـ object 10cm من تحت',en:'Scale Up Bottom',important:true},
     {keysText:'Alt + X',codes:['AltLeft','KeyX'],desc:'يقلل Size الـ object 10cm من تحت',en:'Scale Down Bottom',important:true},
-    {keysText:'Shift + H',codes:['ShiftLeft','KeyH'],desc:'بتظبط طول الـ Object<span class="note-red">لو النقط خرجت برا الـ Box مش معناها نطول الـ Box ـ معناها نحرك الـ Box بنستخدم N / Shift+N</span>',en:'Fit Height',important:true},
+    {keysText:'Shift + H',codes:['ShiftLeft','KeyH'],desc:'بتظبط طول الـ Object علي اطول نقطه موجوده<span class="note-red">لو النقط خرجت برا الـ Box في Frame تاني مش معناها نطول الـ Box ـ معناها نحرك الـ Box بنستخدم N / Shift+N</span>',en:'Fit Height',important:true},
     {keysText:'N',codes:['KeyN'],desc:'ينزل الـ Object كله لتحت',en:'Move Down',important:true},
     {keysText:'Shift + N',codes:['ShiftRight','KeyN'],desc:'يطلع الـ Object كله لفوق',en:'Move Up',important:true},
     {keysText:'▲',codes:['ArrowUp'],desc:'بيحرك الـ Object لقدام',en:'Forward'},
