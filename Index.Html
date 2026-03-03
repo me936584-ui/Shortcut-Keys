@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختصارات لوحة المفاتيح</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #eef2f9;
+  --surface:  #ffffff;
+  --blue:     #1c4587;
+  --blue-mid: #2d5fa8;
+  --blue-lt:  #4a7fd4;
+  --blue-xl:  #d6e4ff;
+  --border:   rgba(28,69,135,0.12);
+  --border2:  rgba(28,69,135,0.22);
+  --text:     #0d1f3c;
+  --text-dim: rgba(13,31,60,0.55);
+  --text-dimmer: rgba(13,31,60,0.3);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  min-height: 100vh;
+  font-family: 'Cairo', sans-serif;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 80px;
+  overflow-x: hidden;
+}
+
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image: radial-gradient(circle, rgba(28,69,135,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events:none; z-index:0;
+}
+
+body::after {
+  content:'';
+  position:fixed; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--blue), var(--blue-lt), var(--blue));
+  z-index:100;
+}
+
+/* ── KEYBOARD SECTION (3 columns: left info | keyboard | right info) ── */
+.keyboard-section {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 20px;
+  animation: none;
+  background: linear-gradient(135deg, #1c4587 0%, #1a3d7a 60%, #163268 100%);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  overflow: hidden;
+  gap: 16px;
+}
+
+/* subtle radial glow */
+.keyboard-section::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* LEFT PANEL */
+.kb-side-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  direction: ltr;
+  min-width: 0;
+  padding: 8px 16px;
+  text-align: center;
+}
+.ksl-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.6rem;
+  letter-spacing: 5px;
+  color: #ffffff;
+  line-height: 1;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+}
+.ksl-divider {
+  width: 36px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+  margin: 2px auto;
+}
+.ksl-title {
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+.ksl-sub {
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.5px;
+}
+
+/* RIGHT PANEL */
+.kb-side-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  direction: ltr;
+  min-width: 0;
+  padding: 8px 16px;
+  text-align: center;
+}
+.ksr-clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 1px;
+  white-space: nowrap;
+  text-align: center;
+}
+.ksr-company {
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ksr-btn {
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.ksr-btn:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.kb-shell {
+  /* Gradient background: white top-left → light blue bottom-right */
+  background: linear-gradient(135deg, #ffffff 0%, #e8eef8 40%, #c5d3ec 75%, #8eaad8 100%);
+  border: 1px solid var(--border2);
+  border-bottom: 4px solid rgba(28,69,135,0.25);
+  border-radius: 18px;
+  padding: 14px 14px 18px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.8),
+    0 20px 60px rgba(28,69,135,0.12),
+    0 4px 16px rgba(28,69,135,0.08),
+    inset 0 1px 0 #fff;
+  display:flex; flex-direction:column; gap:5px;
+  direction:ltr; flex-shrink:0;
+  transform: scale(1);
+  transform-origin: top center;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* METI watermark text behind the keyboard */
+.kb-shell::before {
+  content: 'METI';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 140px;
+  letter-spacing: 24px;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(28, 69, 135, 0.13);
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* make all direct children sit above the watermark */
+.kb-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.kb-top-row  { display:flex; gap:4px; align-items:flex-start; justify-content:space-between; width:100%; }
+.kb-body-row { display:flex; gap:10px; align-items:flex-start; margin-top:6px; }
+.kb-col      { display:flex; flex-direction:column; gap:4px; }
+.kb-row      { display:flex; gap:4px; align-items:flex-start; }
+
+.k {
+  display:flex; flex-direction:column;
+  align-items:flex-start; justify-content:flex-start;
+  padding:4px 5px 3px;
+  width:40px; height:40px;
+  background: linear-gradient(175deg, rgba(255,255,255,0.92) 0%, rgba(230,238,250,0.88) 100%);
+  border: 1px solid rgba(28,69,135,0.2);
+  border-bottom: 3px solid rgba(28,69,135,0.28);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 3px rgba(28,69,135,0.12);
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; color:#1c4587;
+  user-select:none; flex-shrink:0; cursor:default;
+  transition: all 0.09s ease;
+  line-height:1.2; position:relative; overflow:hidden;
+  backdrop-filter: blur(4px);
+}
+.k.gk { width:auto !important; height:auto !important; flex-shrink:1; }
+
+.k.mod {
+  background: linear-gradient(175deg, #f0f4fc 0%, #e6ecfa 100%);
+  border-color: rgba(28,69,135,0.18);
+}
+
+.k:hover:not(.lit) {
+  background: linear-gradient(175deg, #e8f0ff 0%, #dde8ff 100%) !important;
+  border-color: rgba(28,69,135,0.4) !important;
+  border-bottom-color: rgba(28,69,135,0.5) !important;
+  cursor:pointer;
+}
+
+.k .top  { font-size:8px;  color:var(--blue-lt); display:block; line-height:1.1; }
+.k .main { font-size:11px; font-weight:700; color:var(--blue); display:block; text-transform:uppercase; }
+.k .lg   { font-size:10px; color:var(--blue); display:block; font-weight:600; }
+.k .xl   { font-size:13px; color:var(--blue); font-weight:700; }
+.k .xs   { font-size:7.5px; color:var(--blue-mid); display:block; line-height:1.3; font-weight:600; }
+.k.center{ align-items:center; justify-content:center; }
+
+.k.lit {
+  background: #1c4587 !important;
+  border-color: #1c4587 !important;
+  border-bottom-color: #0d2648 !important;
+  border-bottom-width: 1px !important;
+  transform: translateY(2px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 2px 6px rgba(0,0,0,0.2),
+    0 0 16px rgba(28,69,135,0.4),
+    0 0 36px rgba(28,69,135,0.2) !important;
+  z-index:5;
+}
+.k.lit .top,.k.lit .main,.k.lit .lg,.k.lit .xl,.k.lit .xs { color:#fff !important; }
+.k.lit span { color:#fff !important; }
+
+.kb-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+}
+.kb-title-main {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 4px;
+  color: var(--blue);
+}
+.kb-title-sub {
+  font-family: 'Cairo', sans-serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--blue-lt);
+  font-weight: 300;
+}
+.led-strip { display:flex; flex-direction:row; align-items:center; gap:8px; padding:4px 10px; align-self:center; height:28px; }
+.led-item  { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.led-dot   { width:7px; height:7px; border-radius:50%; background:#d0d8ea; box-shadow:inset 0 1px 2px rgba(0,0,0,0.15); transition:all 0.2s; }
+.led-dot.on { background:var(--blue); box-shadow:inset 0 1px 1px rgba(0,0,0,0.1),0 0 6px rgba(28,69,135,0.7),0 0 16px rgba(28,69,135,0.3); }
+.led-lbl   { font-family:'JetBrains Mono',monospace; font-size:6.5px; color:var(--text-dimmer); letter-spacing:0.5px; text-transform:uppercase; }
+
+.shortcuts-section {
+  position:relative; z-index:10;
+  width: 100%;
+  min-width: 0;
+  padding: 20px 20px 0 20px;
+  animation: none;
+}
+
+.big-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  overflow: visible;
+  box-shadow: 0 4px 32px rgba(28,69,135,0.08);
+  opacity: 1;
+  animation: none;
+  direction: rtl;
+}
+.big-card::before {
+  content:'';
+  display:block; height:3px;
+  background: linear-gradient(90deg, var(--blue), var(--blue-lt));
+  border-radius: 18px 18px 0 0;
+}
+
+.cat-section { border-bottom: 1px solid var(--border); position: relative; }
+.cat-section:last-child { border-bottom: none; }
+
+.cat-label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 22px;
+  background: linear-gradient(90deg, #f0f5ff, #fafcff);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.cat-label::before {
+  content:'';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--blue);
+}
+.cat-label.gold::before { background: #d97706; }
+.cat-label.gold .cat-name {
+  color: #000;
+  background: #fef08a;
+  border-radius: 20px;
+  padding: 2px 12px;
+}
+.cat-badge {
+  font-family:'Cairo', sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: #000;
+  background: #fef08a;
+  border: none;
+  border-radius: 20px;
+  padding: 2px 12px;
+}
+
+.cat-name {
+  font-family:'Cairo', sans-serif;
+  font-size:15px; font-weight:900;
+  color: #000; letter-spacing:3px; text-transform:uppercase;
+}
+
+.items-wrapper { padding: 4px 8px 8px; }
+
+.shortcut-item {
+  display:flex; align-items:center; gap:16px;
+  padding: 10px 14px; border-radius:8px;
+  border:1px solid transparent; cursor:pointer;
+  transition:all 0.12s ease;
+  direction:rtl;
+}
+.shortcut-item:hover { background:#f0f6ff; border-color:rgba(28,69,135,0.12); }
+
+.note-red {
+  display: block;
+  font-size: 0.85rem;
+  color: #c0392b;
+  font-weight: 700;
+  margin-top: 2px;
+  text-align: right;
+}
+
+.shortcut-item.important {
+  background: transparent;
+  border-color: transparent;
+}
+.shortcut-item.important:hover {
+  background: #f0f6ff;
+  border-color: rgba(28,69,135,0.12);
+}
+.shortcut-item.important .desc {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+.shortcut-item.important .desc-inner {
+  background: #fef08a;
+  border-radius: 20px;
+  padding: 2px 12px;
+  color: #000;
+  display: inline-block;
+  font-size: 15px;
+}
+
+.desc { font-size:15px; color:var(--text); line-height:1.4; flex:1; text-align:right; font-weight:700; }
+.shortcut-item:hover .desc { color:var(--text); }
+
+.en-tag {
+  flex-shrink: 0;
+  font-family:'Cairo', sans-serif;
+  font-size:15px; font-weight:700;
+  color: var(--blue);
+  background: var(--blue-xl);
+  border: 1px solid rgba(28,69,135,0.2);
+  border-radius: 6px;
+  padding: 3px 10px;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  transform: translateX(8px);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+.shortcut-item:hover .en-tag {
+  opacity: 1;
+  transform: translateX(0);
+}
+.shortcut-item { position: relative; }
+
+.keys-combo {
+  direction:ltr; display:flex; gap:3px; align-items:center;
+  flex-shrink:0; min-width:130px; justify-content:flex-start;
+}
+
+.key-badge {
+  display:inline-flex; align-items:center; justify-content:center;
+  background: linear-gradient(175deg, #fff 0%, #f0f4fd 100%);
+  border: 1px solid rgba(28,69,135,0.2);
+  border-bottom: 2px solid rgba(28,69,135,0.28);
+  border-radius:6px; padding:4px 10px;
+  font-family:'Cairo', sans-serif;
+  font-weight:700; font-size:15px; color: var(--blue);
+  white-space:nowrap; box-shadow:inset 0 1px 0 #fff;
+}
+.shortcut-item:hover .key-badge { background:var(--blue-xl); border-color:rgba(28,69,135,0.35); }
+
+.en-word { color: #1c4587; font-weight: 900; }
+.plus-sign { color:var(--text-dimmer); font-size:0.8rem; font-family:'Cairo',sans-serif; }
+.divider   { width:1px; height:18px; background:var(--border); flex-shrink:0; }
+
+.watermark {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: rgba(28,69,135,0.55);
+  pointer-events: none;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.footer {
+  position:relative; z-index:10; margin-top:56px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem; color:var(--text-dimmer);
+  display:flex; align-items:center; gap:14px; letter-spacing:2px;
+}
+.footer::before,.footer::after { content:''; display:block; height:1px; width:50px; background:linear-gradient(90deg,transparent,var(--border2)); }
+
+@keyframes fadeDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(10px)}  to{opacity:1;transform:none} }
+@keyframes expandX  { from{width:0;opacity:0} to{width:80px;opacity:1} }
+
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(28,69,135,0.15); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(28,69,135,0.35); }
+
+@media(max-width:900px){
+  .shortcuts-grid{grid-template-columns:1fr;}
+  .header h1{font-size:3.2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- KEYBOARD SECTION: left info | keyboard | right info -->
+<div class="keyboard-section">
+
+  <!-- LEFT: clock + Tasks Tracker -->
+  <div class="kb-side-left">
+    <div class="ksr-clock" id="clock"></div>
+    <div class="ksr-company">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Micro Engineering Tech Inc.
+    </div>
+    <button class="ksr-btn">Tasks Tracker</button>
+  </div>
+  <div class="kb-shell" id="shell"></div>
+
+  <!-- RIGHT: METI + company -->
+  <div class="kb-side-right">
+    <div class="ksl-logo">METI</div>
+    <div class="ksl-divider" style="align-self:flex-end;"></div>
+    <div class="ksl-title">Micro Engineering</div>
+    <div class="ksl-sub">Labeling Operations · Internal System</div>
+  </div>
+
+</div>
+
+<div class="shortcuts-section">
+  <div class="big-card" id="list"></div>
+</div>
+
+<div class="footer">— HOVER TO HIGHLIGHT — KEYBOARD INTERACTIVE —</div>
+
+<script>
+const keyMap={};
+const U=40,G=4;
+
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e;}
+function makeKey(w,h,cls,html,code){
+  const e=el('div','k'+(cls?' '+cls:''));
+  e.style.width=w+'px';e.style.height=h+'px';
+  if(html!==undefined)e.innerHTML=html;
+  if(code){Array.isArray(code)?code.forEach(c=>keyMap[c]=e):keyMap[code]=e;}
+  return e;
+}
+const K=(cls,html,code)=>makeKey(U,U,cls,html,code);
+const W=(w,cls,html,code)=>makeKey(w,U,cls,html,code);
+const F=(w,cls,html,code)=>makeKey(w,28,cls,html,code);
+function row(...items){const r=el('div','kb-row');items.forEach(i=>i&&r.appendChild(i));return r;}
+function gap(w){const s=document.createElement('div');s.style.cssText=`width:${w}px;flex-shrink:0;`;return s;}
+const CK=(t,b)=>`<span class="top">${t}</span><span class="main">${b}</span>`;
+const LG=t=>`<span class="lg">${t}</span>`;
+const XL=t=>`<span class="xl">${t}</span>`;
+const XS=t=>`<span class="xs">${t}</span>`;
+
+const shell=document.getElementById('shell');
+
+const fnMain=row(
+  F(28,'mod',LG('Esc'),'Escape'),gap(8),
+  F(U,'mod',LG('F1'),'F1'),F(U,'mod',LG('F2'),'F2'),F(U,'mod',LG('F3'),'F3'),F(U,'mod',LG('F4'),'F4'),gap(6),
+  F(U,'mod',LG('F5'),'F5'),F(U,'mod',LG('F6'),'F6'),F(U,'mod',LG('F7'),'F7'),F(U,'mod',LG('F8'),'F8'),gap(6),
+  F(U,'mod',LG('F9'),'F9'),F(U,'mod',LG('F10'),'F10'),F(U,'mod',LG('F11'),'F11'),F(U,'mod',LG('F12'),'F12'),
+);
+const ledStrip=el('div','led-strip');
+ledStrip.innerHTML=`
+  <div class="led-item"><span class="led-dot" id="led0"></span><span class="led-lbl">Num</span></div>
+  <div class="led-item"><span class="led-dot" id="led1"></span><span class="led-lbl">Caps</span></div>
+  <div class="led-item"><span class="led-dot" id="led2"></span><span class="led-lbl">Scr</span></div>`;
+const topRow=el('div','kb-top-row');
+const kbTitle=el('div','kb-title');
+kbTitle.innerHTML=`<div class="kb-title-main">Shortcuts Keys</div><div class="kb-title-sub">Meti · Micro Engineering</div>`;
+topRow.appendChild(fnMain);topRow.appendChild(kbTitle);topRow.appendChild(ledStrip);
+
+const mainWrapper=document.createElement('div');
+mainWrapper.style.cssText='position:relative;display:flex;flex-direction:column;gap:4px;';
+
+const r1=row(
+  K('',CK('~','`'),'Backquote'),
+  K('',CK('!','1'),'Digit1'),K('',CK('@','2'),'Digit2'),K('',CK('#','3'),'Digit3'),
+  K('',CK('$','4'),'Digit4'),K('',CK('%','5'),'Digit5'),K('',CK('^','6'),'Digit6'),
+  K('',CK('&','7'),'Digit7'),K('',CK('*','8'),'Digit8'),K('',CK('(','9'),'Digit9'),
+  K('',CK(')','0'),'Digit0'),K('',CK('_','-'),'Minus'),K('',CK('+','='),'Equal'),
+  W(79,'mod',LG('Backspace'),'Backspace'),
+);
+
+const rows23=document.createElement('div');
+rows23.style.cssText='display:flex;flex-direction:row;align-items:flex-start;gap:4px;';
+const keysCol=document.createElement('div');
+keysCol.style.cssText='display:flex;flex-direction:column;gap:4px;';
+
+const _r2=el('div','kb-row');
+_r2.appendChild(makeKey(50,U,'mod',LG('Tab'),'Tab'));
+['Q','W','E','R','T','Y','U','I','O','P'].forEach(k=>_r2.appendChild(makeKey(U,U,'',CK(k,k.toLowerCase()),`Key${k}`)));
+_r2.appendChild(makeKey(U,U,'',CK('{','['),'BracketLeft'));
+_r2.appendChild(makeKey(U,U,'',CK('}',']'),'BracketRight'));
+
+const _r3=el('div','kb-row');
+_r3.appendChild(makeKey(60,U,'mod',LG('Caps Lock'),'CapsLock'));
+[['A','KeyA'],['S','KeyS'],['D','KeyD'],['F','KeyF'],['G','KeyG'],['H','KeyH'],['J','KeyJ'],['K','KeyK'],['L','KeyL']].forEach(([k,c])=>_r3.appendChild(makeKey(U,U,'',CK(k,k.toLowerCase()),c)));
+_r3.appendChild(makeKey(U,U,'',CK(':',';'),'Semicolon'));
+_r3.appendChild(makeKey(U,U,'',CK('"',"'"),'Quote'));
+_r3.appendChild(makeKey(U,U,'',CK('|','\\'),'Backslash'));
+
+keysCol.appendChild(_r2);keysCol.appendChild(_r3);
+rows23.appendChild(keysCol);
+
+const enterEl=el('div','k mod');
+enterEl.style.cssText=`width:65px;height:${U*2+G}px;margin-left:-8px;
+  clip-path:polygon(0% 0%,100% 0%,100% 100%,20.5% 100%,20.5% 47.6%,0% 47.6%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;`;
+enterEl.innerHTML=`<span class="enter-arrow" style="font-size:15px;font-weight:700;color:#1c4587;">↵</span><span class="enter-lbl" style="font-size:8px;font-weight:600;color:#1c4587;">Enter</span>`;
+
+// Override lit for Enter manually since clip-path cuts glow
+const origAdd = enterEl.classList.add.bind(enterEl.classList);
+const origRemove = enterEl.classList.remove.bind(enterEl.classList);
+enterEl._litOverride = function(on){
+  if(on){
+    enterEl.style.background='#1c4587';
+    enterEl.style.borderColor='#1c4587';
+    enterEl.style.borderBottomColor='#0d2648';
+    enterEl.style.borderBottomWidth='1px';
+    enterEl.style.transform='translateY(2px)';
+    enterEl.querySelectorAll('span').forEach(s=>s.style.color='#fff');
+  } else {
+    enterEl.style.background='';
+    enterEl.style.borderColor='';
+    enterEl.style.borderBottomColor='';
+    enterEl.style.borderBottomWidth='';
+    enterEl.style.transform='';
+    enterEl.querySelectorAll('span').forEach(s=>s.style.color='#1c4587');
+  }
+};
+keyMap['Enter']=enterEl;
+rows23.appendChild(enterEl);
+
+const r4=row(
+  W(54,'mod',LG('⇧ Shift'),'ShiftLeft'),
+  K('',CK('|','\\'),'IntlBackslash'),K('',CK('Z','z'),'KeyZ'),K('',CK('X','x'),'KeyX'),K('',CK('C','c'),'KeyC'),
+  K('',CK('V','v'),'KeyV'),K('',CK('B','b'),'KeyB'),K('',CK('N','n'),'KeyN'),
+  K('',CK('M','m'),'KeyM'),K('',CK('<',','),'Comma'),K('',CK('>','.'),'Period'),
+  K('',CK('?','/'),'Slash'),
+  W(109,'mod',LG('Shift ⇧'),'ShiftRight'),
+);
+const r5=row(
+  W(54,'mod',LG('Ctrl'),'ControlLeft'),W(U,'mod',LG('⊞'),'MetaLeft'),
+  W(54,'mod',LG('Alt'),'AltLeft'),W(292,'mod center','','Space'),
+  W(54,'mod',LG('Alt Gr'),'AltRight'),W(U,'mod',LG('⊞'),'MetaRight'),
+  W(U,'mod',LG('☰'),'ContextMenu'),W(49,'mod',LG('Ctrl'),'ControlRight'),
+);
+[r1,rows23,r4,r5].forEach(r=>mainWrapper.appendChild(r));
+
+const navWrapper=document.createElement('div');
+navWrapper.style.cssText=`display:grid;grid-template-columns:repeat(3,${U}px);grid-template-rows:28px ${G}px ${U}px ${U}px ${G+U}px ${U}px;gap:${G}px 4px;`;
+function nk(c,r,cls,html,code){
+  const e=el('div','k gk'+(cls?' '+cls:''));
+  e.style.gridColumn=String(c);e.style.gridRow=String(r);
+  e.style.width='auto';e.style.height='auto';e.style.margin='0';
+  if(html!==undefined)e.innerHTML=html;if(code)keyMap[code]=e;return e;
+}
+navWrapper.appendChild(nk(1,1,'mod fn',XS('Print')+XS('Scrn')));
+navWrapper.appendChild(nk(2,1,'mod fn',XS('Scroll')+XS('Lock')));
+navWrapper.appendChild(nk(3,1,'mod fn',XS('Pause')+XS('Break')));
+navWrapper.appendChild(nk(1,3,'mod',XS('Insert'),'Insert'));
+navWrapper.appendChild(nk(2,3,'mod',XS('Home'),'Home'));
+navWrapper.appendChild(nk(3,3,'mod',XS('Pg Up'),'PageUp'));
+navWrapper.appendChild(nk(1,4,'mod',XS('Delete'),'Delete'));
+navWrapper.appendChild(nk(2,4,'mod',XS('End'),'End'));
+navWrapper.appendChild(nk(3,4,'mod',XS('Pg Dn'),'PageDown'));
+navWrapper.appendChild(nk(2,5,'mod center',XL('▲'),'ArrowUp'));
+navWrapper.appendChild(nk(1,6,'mod center',XL('◀'),'ArrowLeft'));
+navWrapper.appendChild(nk(2,6,'mod center',XL('▼'),'ArrowDown'));
+navWrapper.appendChild(nk(3,6,'mod center',XL('▶'),'ArrowRight'));
+
+const numpadWrapper=document.createElement('div');
+numpadWrapper.style.cssText=`display:grid;grid-template-columns:repeat(4,${U}px);grid-template-rows:repeat(5,${U}px);gap:${G}px;`;
+function gk(col,row,colSpan,rowSpan,cls,html,code){
+  const e=el('div','k gk'+(cls?' '+cls:''));
+  e.style.gridColumn=colSpan>1?`${col} / span ${colSpan}`:String(col);
+  e.style.gridRow=rowSpan>1?`${row} / span ${rowSpan}`:String(row);
+  e.style.width='auto';e.style.height='auto';
+  if(html!==undefined)e.innerHTML=html;
+  if(code){Array.isArray(code)?code.forEach(c=>keyMap[c]=e):keyMap[code]=e;}
+  return e;
+}
+numpadWrapper.appendChild(gk(1,1,1,1,'mod',XS('Num')+LG('Lock'),'NumLock'));
+numpadWrapper.appendChild(gk(2,1,1,1,'mod center',LG('/'),'NumpadDivide'));
+numpadWrapper.appendChild(gk(3,1,1,1,'mod center',LG('*'),'NumpadMultiply'));
+numpadWrapper.appendChild(gk(4,1,1,1,'mod center',LG('−'),'NumpadSubtract'));
+numpadWrapper.appendChild(gk(1,2,1,1,'',CK('Home','7'),'Numpad7'));
+numpadWrapper.appendChild(gk(2,2,1,1,'',CK('↑','8'),'Numpad8'));
+numpadWrapper.appendChild(gk(3,2,1,1,'',CK('PgUp','9'),'Numpad9'));
+numpadWrapper.appendChild(gk(4,2,1,2,'mod center',LG('+'),'NumpadAdd'));
+numpadWrapper.appendChild(gk(1,3,1,1,'',CK('←','4'),'Numpad4'));
+numpadWrapper.appendChild(gk(2,3,1,1,'center',CK('','5'),'Numpad5'));
+numpadWrapper.appendChild(gk(3,3,1,1,'',CK('→','6'),'Numpad6'));
+numpadWrapper.appendChild(gk(1,4,1,1,'',CK('End','1'),'Numpad1'));
+numpadWrapper.appendChild(gk(2,4,1,1,'',CK('↓','2'),'Numpad2'));
+numpadWrapper.appendChild(gk(3,4,1,1,'',CK('PgDn','3'),'Numpad3'));
+numpadWrapper.appendChild(gk(4,4,1,2,'mod center',LG('Enter'),'NumpadEnter'));
+numpadWrapper.appendChild(gk(1,5,2,1,'',CK('Ins','0'),'Numpad0'));
+numpadWrapper.appendChild(gk(3,5,1,1,'',CK('Del','.'),'NumpadDecimal'));
+
+const bodyRow=el('div','kb-body-row');
+bodyRow.appendChild(mainWrapper);bodyRow.appendChild(navWrapper);bodyRow.appendChild(numpadWrapper);
+shell.appendChild(topRow);shell.appendChild(bodyRow);
+
+const shortcuts=[
+  {cat:'General',items:[
+    {keysText:'Ctrl + Z',codes:['ControlLeft','KeyZ'],desc:'لو عملت حاجه منغير قصد هترجع خطوه لورا',en:'Undo',important:true},
+    {keysText:'Ctrl + Shift + Z',codes:['ControlLeft','ShiftLeft','KeyZ'],desc:'لو رجعت خطوه لورا منغير قصد وعاوز ترجع لقدام',en:'Redo'},
+    {keysText:'Ctrl + S',codes:['ControlLeft','KeyS'],desc:'Save',en:'Save',important:true},
+    {keysText:'Tab',codes:['Tab'],desc:'لما تبقي عامل Select علي Object بينقلك علي الـ Object اللي بعده',en:'Next Object'},
+    {keysText:'Shift + Tab',codes:['ShiftLeft','Tab'],desc:'لما تبقي عامل Select علي Object بينقلك علي الـ Object اللي قبله',en:'Prev Object'},
+    {keysText:'Ctrl + Enter',codes:['ControlRight','Enter'],desc:'بيعمل Check Mark علامه الصح للـ Object',en:'Check Mark'},
+    {keysText:'Esc',codes:['Escape'],desc:'تقدر تطلع من Select الـ Object',en:'Exit'},
+  ]},
+  {cat:'Delete',catImportant:true,catBadge:'Daily Use',items:[
+    {keysText:'Delete',codes:['Delete'],desc:'بيمسح الـ Frames من بعد اخر Keyframe<span class="note-red">لو بين 2 Keyframes مش هيتمسح الـ frames اللي بينها</span>',en:'Delete Frame'},
+    {keysText:'Ctrl + Shift + Delete',codes:['ControlLeft','ShiftLeft','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
+  ]},
+  {cat:'Camera',items:[
+    {keysText:'R',codes:['KeyR'],desc:'فتح الكاميرا',en:'Open Camera'},
+    {keysText:'[',codes:['BracketLeft'],desc:'نقل من كاميرا لكاميرا (شمال)',en:'Prev Camera'},
+    {keysText:']',codes:['BracketRight'],desc:'نقل من كاميرا لكاميرا (يمين)',en:'Next Camera'},
+    {keysText:'\\',codes:['Backslash'],desc:'Track Projection لرؤية الـ Box الأصفر اللي في الصوره',en:'Track Projection'},
+  ]},
+  {cat:'Movement Camera',items:[
+    {keysText:'C',codes:['KeyC'],desc:'هينقلك للـ AV و لو عامل Select علي Object هينقلك عليه',en:'Go To AV Or Object',important:true},
+    {keysText:'W',codes:['KeyW'],desc:'تحرك لقدام',en:'Forward'},
+    {keysText:'S',codes:['KeyS'],desc:'تحرك لورا',en:'Backward'},
+    {keysText:'A',codes:['KeyA'],desc:'تحرك شمال',en:'Left'},
+    {keysText:'D',codes:['KeyD'],desc:'تحرك يمين',en:'Right'},
+    {keysText:'E',codes:['KeyE'],desc:'بتنزل بالرويه الـ 3D لتحت',en:'Move Camera Down',important:true},
+    {keysText:'Q',codes:['KeyQ'],desc:'بتطلع بالرويه الـ 3D لفوق',en:'Move Camera Up',important:true},
+    {keysText:'~',codes:['Backquote'],desc:'تنقل من 2D لـ 3D',en:'Toggle View'},
+  ]},
+  {cat:'Object',items:[
+    {keysText:'B',codes:['KeyB'],desc:'عشان تقدر تعمل Box',en:'Create Box',important:true},
+    {keysText:'T',codes:['KeyT'],desc:'تغير الاتجاهات للـ Objects',en:'Set Direction',important:true},
+    {keysText:'Z',codes:['KeyZ'],desc:'يكبر Size الـ object 10cm من فوق',en:'Scale Up Top',important:true},
+    {keysText:'Alt + Z',codes:['AltLeft','KeyZ'],desc:'يقلل Size الـ object 10cm من فوق',en:'Scale Down Top',important:true},
+    {keysText:'X',codes:['KeyX'],desc:'يكبر Size الـ object 10cm من تحت',en:'Scale Up Bottom',important:true},
+    {keysText:'Alt + X',codes:['AltLeft','KeyX'],desc:'يقلل Size الـ object 10cm من تحت',en:'Scale Down Bottom',important:true},
+    {keysText:'N',codes:['KeyN'],desc:'ينزل الـ Object كله لتحت',en:'Move Down',important:true},
+    {keysText:'Shift + N',codes:['ShiftLeft','KeyN'],desc:'يطلع الـ Object كله لفوق',en:'Move Up',important:true},
+    {keysText:'▲',codes:['ArrowUp'],desc:'بيحرك الـ Object لقدام',en:'Forward'},
+    {keysText:'▼',codes:['ArrowDown'],desc:'بيحرك الـ Object لورا',en:'Backward'},
+    {keysText:'◀',codes:['ArrowLeft'],desc:'بيحرك الـ Object لشمال',en:'Left'},
+    {keysText:'▶',codes:['ArrowRight'],desc:'بيحرك الـ Object ليمين',en:'Right'},
+    {keysText:'Shift + ▲',codes:['ShiftRight','ArrowUp'],desc:'بيحرك الـ Object لقدام أسرع',en:'Fast Forward'},
+    {keysText:'Shift + ▼',codes:['ShiftRight','ArrowDown'],desc:'بيحرك الـ Object لورا أسرع',en:'Fast Backward'},
+    {keysText:'Shift + ◀',codes:['ShiftRight','ArrowLeft'],desc:'بيحرك الـ Object لشمال أسرع',en:'Fast Left'},
+    {keysText:'Shift + ▶',codes:['ShiftRight','ArrowRight'],desc:'بيحرك الـ Object ليمين أسرع',en:'Fast Right'},
+    {keysText:'Ctrl + ▶',codes:['ControlRight','ArrowRight'],desc:'بيلف الـ Object ناحية اليمين في الـ 2D',en:'Rotate Right 2D'},
+    {keysText:'Ctrl + ◀',codes:['ControlRight','ArrowLeft'],desc:'بيلف الـ Object ناحية الشمال في الـ 2D',en:'Rotate Left 2D'},
+    {keysText:'Shift + K',codes:['ShiftRight','KeyK'],desc:'بيميل البوكس لقدام 3D',en:'Tilt Forward'},
+    {keysText:'Shift + L',codes:['ShiftRight','KeyL'],desc:'بيميل البوكس لورا 3D',en:'Tilt Backward'},
+    {keysText:'H',codes:['KeyH'],desc:'بيميل البوكس شمال 3D',en:'Tilt Left'},
+    {keysText:'J',codes:['KeyJ'],desc:'بيميل البوكس يمين 3D',en:'Tilt Right'},
+  ]},
+  {cat:'Frames',catImportant:true,catBadge:'Daily Use',items:[
+    {keysText:'>',codes:['Period'],desc:'تقدم Frame',en:'Next Frame'},
+    {keysText:'Shift + >',codes:['ShiftRight','Period'],desc:'يقدمك 5 Frames',en:'+5 Frames'},
+    {keysText:'<',codes:['Comma'],desc:'ترجع Frame',en:'Prev Frame'},
+    {keysText:'Shift + <',codes:['ShiftRight','Comma'],desc:'يرجعك 5 Frames',en:'-5 Frames'},
+    {keysText:'K',codes:['KeyK'],desc:'تزود أو تشيل Key Frame',en:'Toggle Keyframe'},
+    {keysText:'Ctrl + >',codes:['ControlRight','Period'],desc:'تقدم للـ Frame اللي جاي',en:'Jump Forward'},
+    {keysText:'Ctrl + <',codes:['ControlRight','Comma'],desc:'ترجع للـ Frame اللي فات',en:'Jump Backward'},
+    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltLeft','KeyK'],desc:'يشيل كل الـ Frames ما عدا اللي إنت واقف عنده',en:'Clear Frames'},
+  ]},
+];
+
+function highlightEnglish(text){
+  return text.replace(/(<[^>]+>)|([A-Za-z0-9][A-Za-z0-9\s\-\.]*)/g, function(match, tag, word){
+    if(tag) return tag;
+    return '<span class="en-word">' + word + '</span>';
+  });
+}
+function buildKeyBadge(keyText){
+  return keyText.split(' + ').map((p,i,a)=>
+    i<a.length-1?`<span class="key-badge">${p}</span><span class="plus-sign">+</span>`:`<span class="key-badge">${p}</span>`
+  ).join('');
+}
+
+const listEl=document.getElementById('list');
+shortcuts.forEach((cat,ci)=>{
+  const section=el('div','cat-section');
+  const label=el('div','cat-label'+(cat.catImportant?' gold':''));
+  label.innerHTML=`<div class="cat-name">${cat.cat}</div>${cat.catBadge?`<span class="cat-badge">${cat.catBadge}</span>`:''}`;
+  section.appendChild(label);
+  const wrapper=el('div','items-wrapper');
+  cat.items.forEach(item=>{
+    const div=el('div','shortcut-item'+(item.important?' important':''));
+    const descContent = highlightEnglish(item.desc);
+    const descHtml = item.important
+      ? `<div class="desc"><span class="desc-inner">${descContent}</span></div>`
+      : `<div class="desc">${descContent}</div>`;
+    div.innerHTML=`${descHtml}<span class="en-tag">${item.en}</span><div class="divider"></div><div class="keys-combo">${buildKeyBadge(item.keysText)}</div>`;
+    div.addEventListener('mouseenter',()=>item.codes.forEach(c=>{
+      const k=keyMap[c];
+      if(!k) return;
+      if(k._litOverride) k._litOverride(true); else k.classList.add('lit');
+    }));
+    div.addEventListener('mouseleave',()=>item.codes.forEach(c=>{
+      const k=keyMap[c];
+      if(!k) return;
+      if(k._litOverride) k._litOverride(false); else k.classList.remove('lit');
+    }));
+    wrapper.appendChild(div);
+  });
+  section.appendChild(wrapper);
+  listEl.appendChild(section);
+});
+
+window.addEventListener('keydown',e=>{
+  const k = keyMap[e.code];
+  if(k){
+    if(k._litOverride) k._litOverride(true);
+    else k.classList.add('lit');
+  }
+  [['led0','NumLock'],['led1','CapsLock'],['led2','ScrollLock']].forEach(([id,mod])=>{
+    document.getElementById(id)?.classList.toggle('on',e.getModifierState(mod));
+  });
+});
+window.addEventListener('keyup',e=>{
+  const k = keyMap[e.code];
+  if(k){
+    if(k._litOverride) k._litOverride(false);
+    else k.classList.remove('lit');
+  }
+});
+
+function scaleKeyboard(){
+  const shell = document.getElementById('shell');
+  const section = shell.closest('.keyboard-section');
+  const available = section.clientWidth - 32;
+  const naturalWidth = shell.scrollWidth;
+  const scale = Math.min(1, available / naturalWidth);
+  shell.style.transform = `scale(${scale})`;
+  shell.style.transformOrigin = 'top center';
+  shell.style.marginBottom = `-${Math.round(shell.scrollHeight * (1 - scale))}px`;
+}
+// Clock
+function updateClock(){
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+scaleKeyboard();
+window.addEventListener('resize', scaleKeyboard);
+</script>
+</body>
+</html>
