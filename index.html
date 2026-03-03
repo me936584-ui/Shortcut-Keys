@@ -51,15 +51,30 @@ body::after {
   z-index: 50;
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  padding: 12px 20px 12px;
+  padding: 8px 20px 12px;
   animation: none;
   background: linear-gradient(135deg, #1c4587 0%, #1a3d7a 60%, #163268 100%);
   box-shadow: 0 4px 24px rgba(0,0,0,0.3);
   overflow: hidden;
+  gap: 8px;
+}
+
+.kb-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   gap: 16px;
-  flex-wrap: wrap;
+}
+
+.kb-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
 }
 
 .kb-header {
@@ -74,8 +89,7 @@ body::after {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: none;
-  padding: 6px 0 2px;
-  order: -1;
+  padding: 4px 0 0;
 }
 
 .keyboard-section::before {
@@ -478,24 +492,22 @@ body::after {
 
 <div class="keyboard-section">
   <div class="kb-header">Lidar Shortcuts In Gulp</div>
-
-  <div class="kb-side-left">
-    <div class="ksr-clock" id="clock"></div>
-    <div class="ksr-company">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      Micro Engineering Tech Inc.
+  <div class="kb-inner">
+    <div class="kb-side-left">
+      <div class="ksr-clock" id="clock"></div>
+      <div class="ksr-company">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Micro Engineering Tech Inc.
+      </div>
     </div>
-    <div style="font-family:'Cairo',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:1px;color:#1c4587;background:#ffffff;border-radius:10px;padding:8px 18px;white-space:nowrap;">Lidar Shortcuts In Gulp</div>
+    <div class="kb-shell" id="shell"></div>
+    <div class="kb-side-right">
+      <div class="ksl-logo">METI</div>
+      <div class="ksl-divider" style="align-self:flex-end;"></div>
+      <div class="ksl-title">Micro Engineering</div>
+      <div class="ksl-sub">Labeling Operations · Internal System</div>
+    </div>
   </div>
-  <div class="kb-shell" id="shell"></div>
-
-  <div class="kb-side-right">
-    <div class="ksl-logo">METI</div>
-    <div class="ksl-divider" style="align-self:flex-end;"></div>
-    <div class="ksl-title">Micro Engineering</div>
-    <div class="ksl-sub">Labeling Operations · Internal System</div>
-  </div>
-
 </div>
 
 <div class="shortcuts-section">
@@ -641,8 +653,37 @@ navWrapper.appendChild(nk(1,6,'mod center',XL('◀'),'ArrowLeft'));
 navWrapper.appendChild(nk(2,6,'mod center',XL('▼'),'ArrowDown'));
 navWrapper.appendChild(nk(3,6,'mod center',XL('▶'),'ArrowRight'));
 
+const numpadWrapper=document.createElement('div');
+numpadWrapper.style.cssText=`display:grid;grid-template-columns:repeat(4,${U}px);grid-template-rows:repeat(5,${U}px);gap:${G}px;`;
+function gk(col,row,colSpan,rowSpan,cls,html,code){
+  const e=el('div','k gk'+(cls?' '+cls:''));
+  e.style.gridColumn=colSpan>1?`${col} / span ${colSpan}`:String(col);
+  e.style.gridRow=rowSpan>1?`${row} / span ${rowSpan}`:String(row);
+  e.style.width='auto';e.style.height='auto';
+  if(html!==undefined)e.innerHTML=html;
+  if(code){Array.isArray(code)?code.forEach(c=>keyMap[c]=e):keyMap[code]=e;}
+  return e;
+}
+numpadWrapper.appendChild(gk(1,1,1,1,'mod',XS('Num')+LG('Lock'),'NumLock'));
+numpadWrapper.appendChild(gk(2,1,1,1,'mod center',LG('/'),'NumpadDivide'));
+numpadWrapper.appendChild(gk(3,1,1,1,'mod center',LG('*'),'NumpadMultiply'));
+numpadWrapper.appendChild(gk(4,1,1,1,'mod center',LG('−'),'NumpadSubtract'));
+numpadWrapper.appendChild(gk(1,2,1,1,'',CK('Home','7'),'Numpad7'));
+numpadWrapper.appendChild(gk(2,2,1,1,'',CK('↑','8'),'Numpad8'));
+numpadWrapper.appendChild(gk(3,2,1,1,'',CK('PgUp','9'),'Numpad9'));
+numpadWrapper.appendChild(gk(4,2,1,2,'mod center',LG('+'),'NumpadAdd'));
+numpadWrapper.appendChild(gk(1,3,1,1,'',CK('←','4'),'Numpad4'));
+numpadWrapper.appendChild(gk(2,3,1,1,'center',CK('','5'),'Numpad5'));
+numpadWrapper.appendChild(gk(3,3,1,1,'',CK('→','6'),'Numpad6'));
+numpadWrapper.appendChild(gk(1,4,1,1,'',CK('End','1'),'Numpad1'));
+numpadWrapper.appendChild(gk(2,4,1,1,'',CK('↓','2'),'Numpad2'));
+numpadWrapper.appendChild(gk(3,4,1,1,'',CK('PgDn','3'),'Numpad3'));
+numpadWrapper.appendChild(gk(4,4,1,2,'mod center',LG('Enter'),'NumpadEnter'));
+numpadWrapper.appendChild(gk(1,5,2,1,'',CK('Ins','0'),'Numpad0'));
+numpadWrapper.appendChild(gk(3,5,1,1,'',CK('Del','.'),'NumpadDecimal'));
+
 const bodyRow=el('div','kb-body-row');
-bodyRow.appendChild(mainWrapper);bodyRow.appendChild(navWrapper);
+bodyRow.appendChild(mainWrapper);bodyRow.appendChild(navWrapper);bodyRow.appendChild(numpadWrapper);
 shell.appendChild(topRow);shell.appendChild(bodyRow);
 
 const shortcuts=[
@@ -688,9 +729,17 @@ const shortcuts=[
     {keysText:'Alt + Z',codes:['AltLeft','KeyZ'],desc:'يقلل Size الـ object 10cm من فوق',en:'Scale Down Top',important:true},
     {keysText:'X',codes:['KeyX'],desc:'يكبر Size الـ object 10cm من تحت',en:'Scale Up Bottom',important:true},
     {keysText:'Alt + X',codes:['AltLeft','KeyX'],desc:'يقلل Size الـ object 10cm من تحت',en:'Scale Down Bottom',important:true},
-    {keysText:'Shift + H',codes:['ShiftLeft','KeyH'],desc:'بتظبط طول الـ Object علي اطول نقطه موجوده<span class="note-red">لو النقط خرجت برا الـ Box في Frame تاني مش معناها نطول الـ Box ـ معناها نحرك الـ Box بنستخدم N / Shift+N</span>',en:'Fit Height',important:true},
+    {keysText:'Shift + H',codes:['ShiftLeft','KeyH'],desc:'بتظبط طول الـ Object علي اطول نقطه موجوده واقصر نقطه حتي لو تحت الـ Map<span class="note-red">لو النقط خرجت برا الـ Box في Frame تاني مش معناها نطول الـ Box ـ معناها نحرك الـ Box بنستخدم N / Shift+N</span>',en:'Fit Height',important:true},
+    {keysText:'Shift + F',codes:['ShiftLeft','KeyF'],desc:'بيخلي الـ Box علي سطح الـ Map واعلي نقطه بس',en:'Ground Fit',important:true},
+    {keysText:'Alt + Shift + F',codes:['AltLeft','ShiftLeft','KeyF'],desc:'Disable auto Ground ـ بيطير الـ Box ومش بيخلي ليه علاقه بالـ Map',en:'Disable Auto Ground',important:true},
     {keysText:'N',codes:['KeyN'],desc:'ينزل الـ Object كله لتحت',en:'Move Down',important:true},
     {keysText:'Shift + N',codes:['ShiftRight','KeyN'],desc:'يطلع الـ Object كله لفوق',en:'Move Up',important:true},
+  ]},
+  {cat:'Delete',catImportant:true,catBadge:'Daily Use',items:[
+    {keysText:'Delete',codes:['Delete'],desc:'بيمسح الـ Frames من بعد اخر Keyframe<span class="note-red">لو بين 2 Keyframes مش هيتمسح الـ frames اللي بينها</span>',en:'Delete Frame'},
+    {keysText:'Ctrl + Shift + Delete',codes:['ControlRight','ShiftRight','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
+  ]},
+  {cat:'Other',items:[
     {keysText:'▲',codes:['ArrowUp'],desc:'بيحرك الـ Object لقدام',en:'Forward'},
     {keysText:'▼',codes:['ArrowDown'],desc:'بيحرك الـ Object لورا',en:'Backward'},
     {keysText:'◀',codes:['ArrowLeft'],desc:'بيحرك الـ Object لشمال',en:'Left'},
@@ -705,10 +754,6 @@ const shortcuts=[
     {keysText:'Shift + L',codes:['ShiftRight','KeyL'],desc:'بيميل البوكس لورا 3D',en:'Tilt Backward'},
     {keysText:'H',codes:['KeyH'],desc:'بيميل البوكس شمال 3D',en:'Tilt Left'},
     {keysText:'J',codes:['KeyJ'],desc:'بيميل البوكس يمين 3D',en:'Tilt Right'},
-  ]},
-  {cat:'Delete',catImportant:true,catBadge:'Daily Use',items:[
-    {keysText:'Delete',codes:['Delete'],desc:'بيمسح الـ Frames من بعد اخر Keyframe<span class="note-red">لو بين 2 Keyframes مش هيتمسح الـ frames اللي بينها</span>',en:'Delete Frame'},
-    {keysText:'Ctrl + Shift + Delete',codes:['ControlRight','ShiftRight','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
   ]},
 ];
 
@@ -776,8 +821,8 @@ window.addEventListener('keyup',e=>{
 
 function scaleKeyboard(){
   const shell = document.getElementById('shell');
-  const section = shell.closest('.keyboard-section');
-  const available = section.clientWidth - 32;
+  const inner = shell.closest('.kb-inner');
+  const available = inner.clientWidth - 32;
   const naturalWidth = shell.scrollWidth;
   const scale = Math.min(1, available / naturalWidth);
   shell.style.transform = `scale(${scale})`;
