@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gulp Shortcuts</title>
+<title>اختصارات لوحة المفاتيح</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 :root {
   --bg:       #eef2f9;
@@ -499,14 +502,14 @@ body::after {
 <!-- KEYBOARD SECTION: left info | keyboard | right info -->
 <div class="keyboard-section">
 
-  <!-- LEFT: clock + Gulp Shortcuts -->
+  <!-- LEFT: clock + Tasks Tracker -->
   <div class="kb-side-left">
     <div class="ksr-clock" id="clock"></div>
     <div class="ksr-company">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       Micro Engineering Tech Inc.
     </div>
-    <button class="ksr-btn">Gulp Shortcuts</button>
+    <button class="ksr-btn">Tasks Tracker</button>
   </div>
   <div class="kb-shell" id="shell"></div>
 
@@ -711,7 +714,7 @@ const shortcuts=[
   ]},
   {cat:'Delete',catImportant:true,catBadge:'Daily Use',items:[
     {keysText:'Delete',codes:['Delete'],desc:'بيمسح الـ Frames من بعد اخر Keyframe<span class="note-red">لو بين 2 Keyframes مش هيتمسح الـ frames اللي بينها</span>',en:'Delete Frame'},
-    {keysText:'Ctrl + Shift + Delete',codes:['ControlLeft','ShiftLeft','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
+    {keysText:'Ctrl + Shift + Delete',codes:['ControlRight','ShiftRight','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
   ]},
   {cat:'Camera',items:[
     {keysText:'R',codes:['KeyR'],desc:'فتح الكاميرا',en:'Open Camera'},
@@ -737,7 +740,7 @@ const shortcuts=[
     {keysText:'X',codes:['KeyX'],desc:'يكبر Size الـ object 10cm من تحت',en:'Scale Up Bottom',important:true},
     {keysText:'Alt + X',codes:['AltLeft','KeyX'],desc:'يقلل Size الـ object 10cm من تحت',en:'Scale Down Bottom',important:true},
     {keysText:'N',codes:['KeyN'],desc:'ينزل الـ Object كله لتحت',en:'Move Down',important:true},
-    {keysText:'Shift + N',codes:['ShiftLeft','KeyN'],desc:'يطلع الـ Object كله لفوق',en:'Move Up',important:true},
+    {keysText:'Shift + N',codes:['ShiftRight','KeyN'],desc:'يطلع الـ Object كله لفوق',en:'Move Up',important:true},
     {keysText:'▲',codes:['ArrowUp'],desc:'بيحرك الـ Object لقدام',en:'Forward'},
     {keysText:'▼',codes:['ArrowDown'],desc:'بيحرك الـ Object لورا',en:'Backward'},
     {keysText:'◀',codes:['ArrowLeft'],desc:'بيحرك الـ Object لشمال',en:'Left'},
@@ -761,7 +764,7 @@ const shortcuts=[
     {keysText:'K',codes:['KeyK'],desc:'تزود أو تشيل Key Frame',en:'Toggle Keyframe'},
     {keysText:'Ctrl + >',codes:['ControlRight','Period'],desc:'تقدم للـ Frame اللي جاي',en:'Jump Forward'},
     {keysText:'Ctrl + <',codes:['ControlRight','Comma'],desc:'ترجع للـ Frame اللي فات',en:'Jump Backward'},
-    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltLeft','KeyK'],desc:'يشيل كل الـ Frames ما عدا اللي إنت واقف عنده',en:'Clear Frames'},
+    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltRight','KeyK'],desc:'يشيل كل الـ Frames ما عدا اللي إنت واقف عنده',en:'Clear Frames'},
   ]},
 ];
 
@@ -837,8 +840,8 @@ function scaleKeyboard(){
 }
 // Clock
 function updateClock(){
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+  const el2 = document.getElementById('clock');
+  if(el2) el2.textContent = new Date().toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
 }
 updateClock();
 setInterval(updateClock, 1000);
