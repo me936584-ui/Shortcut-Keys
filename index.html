@@ -339,7 +339,6 @@ body::after {
   background: linear-gradient(90deg, #f0f5ff, #fafcff);
   border-bottom: 1px solid var(--border);
   position: relative;
-  text-align: left;
 }
 .cat-label::before {
   content:'';
@@ -717,9 +716,9 @@ const shortcuts=[
     {keysText:'<',codes:['Comma'],desc:'ترجع Frame',en:'Prev Frame'},
     {keysText:'Shift + <',codes:['ShiftRight','Comma'],desc:'يرجعك 5 Frames',en:'-5 Frames'},
     {keysText:'K',codes:['KeyK'],desc:'تزود أو تشيل Key Frame',en:'Toggle Keyframe'},
-    {keysText:'Ctrl + >',codes:['ControlRight','Period'],desc:'تقدم للـ Frame اللي جاي',en:'Jump Forward'},
-    {keysText:'Ctrl + <',codes:['ControlRight','Comma'],desc:'ترجع للـ Frame اللي فات',en:'Jump Backward'},
-    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltRight','KeyK'],desc:'يشيل كل الـ Frames ما عدا اللي إنت واقف عنده',en:'Clear Frames'},
+    {keysText:'Ctrl + >',codes:['ControlRight','Period'],desc:'تقدم لاقرب Key Frame من الـ Frame اللي انت واقف عنده',en:'Jump Forward'},
+    {keysText:'Ctrl + <',codes:['ControlRight','Comma'],desc:'ترجع لاقرب Key Frame من الـ Frame اللي انت واقف عنده',en:'Jump Backward'},
+    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltRight','KeyK'],desc:'بيشيل كل الـ Key Frames اللي موجوده ما عدا الـ Key Frame اللي انت عنده',en:'Clear Frames'},
   ]},
   {cat:'Object',items:[
     {keysText:'P',codes:['KeyP'],desc:'عشان تعمل الـ Zone',en:'Create Zone',important:true},
