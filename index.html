@@ -1,843 +1,1786 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lidar Shortcuts In Gulp</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>METI | New Hire Analytics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --bg:       #eef2f9;
-  --surface:  #ffffff;
-  --blue:     #1c4587;
-  --blue-mid: #2d5fa8;
-  --blue-lt:  #4a7fd4;
-  --blue-xl:  #d6e4ff;
-  --border:   rgba(28,69,135,0.12);
-  --border2:  rgba(28,69,135,0.22);
-  --text:     #0d1f3c;
-  --text-dim: rgba(13,31,60,0.55);
-  --text-dimmer: rgba(13,31,60,0.3);
+:root{
+  --bg:#f4f7fb;--surface:#fff;--soft:#edf3fa;
+  --text:#17263c;--muted:#71819a;--line:#e4ebf4;
+  --green:#42a982;--blue:#5a86d5;--orange:#e8a05a;
+  --red:#d96572;--pending:#8996aa;
+  --shadow:0 12px 34px rgba(17,35,68,.055);
+}
+html[data-theme="dark"]{
+  --bg:#0d1625;--surface:#172337;--soft:#1d2e46;
+  --text:#eef4fc;--muted:#9eafc6;--line:#293950;
+  --green:#48bf95;--blue:#72a2ff;--orange:#f0a964;
+  --red:#ec7180;--pending:#a8b5c8;
+  --shadow:0 14px 36px rgba(0,0,0,.22);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,"Segoe UI",sans-serif;
+  background:var(--bg);color:var(--text);
+  transition:background .25s,color .25s;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+.app{max-width:1450px;margin:auto;padding:22px 24px 36px}
+.header{
+  background:linear-gradient(125deg,#10283e,#1b4260);
+  border-radius:22px;padding:22px 28px;color:#fff;
+  margin-bottom:20px;box-shadow:var(--shadow);
+}
+.header-top,.brand,.header-actions{
+  display:flex;align-items:center;gap:20px;
+}
+.header-top{justify-content:space-between}
+.brand{gap:23px}.header-actions{gap:12px}
+.meti-logo{display:flex;align-items:center;flex-shrink:0}
+.meti-logo svg{display:block;width:210px;max-width:100%;height:auto}
+.brand-divider{
+  height:41px;width:1px;background:rgba(255,255,255,.23);
+}
+.brand-text h1{font-size:23px;margin:0;font-weight:800}
+.brand-text p{font-size:12px;margin:6px 0 0;color:#b8cadc}
+.connection{
+  display:flex;align-items:center;gap:8px;
+  color:#d2e2f0;font-size:11px;white-space:nowrap;
+}
+.connection-dot{
+  width:8px;height:8px;border-radius:50%;background:#8a9aab;
+}
+.connection-dot.online{background:#47d9a0}
+.connection-dot.offline{background:var(--red)}
+.theme-toggle,.logout-btn{
+  color:#fff;border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;padding:11px 14px;
+  background:rgba(255,255,255,.09);
+  font-size:12px;font-weight:700;
+}
+.theme-toggle:hover,.logout-btn:hover{
+  background:rgba(255,255,255,.16);
+}
+.panel{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:19px;box-shadow:var(--shadow);
+}
+.section-head{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;margin-bottom:20px;
+}
+.section-head h2{margin:0;font-size:16px;font-weight:800}
+.section-head p{margin:6px 0 0;color:var(--muted);font-size:12px}
+.tag{
+  background:var(--soft);color:var(--muted);border-radius:30px;
+  padding:8px 12px;font-size:10px;font-weight:700;white-space:nowrap;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+/* AUTH */
 
-body {
-  background: var(--bg);
-  min-height: 100vh;
-  font-family: 'Cairo', sans-serif;
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 0 80px;
-  overflow-x: hidden;
+.auth-screen{
+  min-height:100vh;display:grid;place-items:center;padding:20px;
 }
+.auth-shell{width:min(100%,465px)}
+.auth-brand{
+  background:linear-gradient(125deg,#10283e,#1b4260);
+  border-radius:22px 22px 0 0;
+  padding:30px 25px;text-align:center;color:#fff;
+}
+.auth-brand .meti-logo{justify-content:center}
+.auth-brand .meti-logo svg{width:195px}
+.auth-brand h1{font-size:20px;margin:18px 0 5px}
+.auth-brand p{margin:0;color:#b8cadc;font-size:12px}
+.auth-card{padding:28px;border-radius:0 0 22px 22px}
+.auth-card h2{margin:0 0 6px;font-size:20px}
+.auth-sub{font-size:12px;color:var(--muted);margin:0 0 20px}
+.auth-tabs{
+  display:grid;grid-template-columns:1fr 1fr;gap:5px;
+  padding:5px;background:var(--soft);
+  border-radius:12px;margin-bottom:24px;
+}
+.auth-tab{
+  border:0;border-radius:9px;padding:11px;
+  background:transparent;color:var(--muted);font-weight:700;
+}
+.auth-tab.active{
+  background:var(--surface);color:var(--text);
+  box-shadow:var(--shadow);
+}
+.auth-fields{display:grid;gap:16px}
+.auth-button{
+  width:100%;height:47px;border:0;border-radius:11px;
+  color:#fff;background:#183752;font-weight:700;margin-top:22px;
+}
+.auth-button:disabled{opacity:.65;cursor:wait}
+.auth-message{
+  margin-top:14px;padding:12px;border-radius:10px;font-size:12px;
+  background:rgba(217,101,114,.1);color:var(--red);
+}
+.auth-message.success{
+  background:rgba(66,169,130,.12);color:var(--green);
+}
+.auth-theme{text-align:center;margin-top:16px}
+.auth-theme button{
+  background:var(--surface);color:var(--text);
+  border:1px solid var(--line);
+  border-radius:12px;padding:10px 15px;
+}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:53px!important}
+.eye-button{
+  position:absolute;right:5px;top:5px;
+  width:38px;height:36px;border:0;border-radius:8px;
+  background:transparent;color:var(--muted);
+  font-size:17px;
+}
+.eye-button:hover{background:var(--surface)}
+.field label{
+  display:block;font-size:11px;font-weight:700;
+  color:var(--muted);margin-bottom:8px;
+}
+.field input,.field select{
+  height:46px;width:100%;border:1px solid var(--line);
+  background:var(--soft);color:var(--text);
+  border-radius:11px;padding:0 13px;outline:none;
+}
+.field input:focus,.field select:focus{border-color:var(--blue)}
 
-body::after {
-  content:'';
-  position:fixed; top:0; left:0; right:0; height:3px;
-  background: linear-gradient(90deg, var(--blue), var(--blue-lt), var(--blue));
-  z-index:100;
-}
+/* FILTERS */
 
-.keyboard-section {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px 20px 12px;
-  animation: none;
-  background: linear-gradient(135deg, #1c4587 0%, #1a3d7a 60%, #163268 100%);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
-  overflow: hidden;
-  gap: 8px;
+.filter-panel{padding:21px 24px;margin-bottom:17px}
+.filters{
+  display:grid;grid-template-columns:1fr 1fr auto;
+  gap:15px;align-items:end;
 }
+.refresh{
+  height:46px;padding:0 24px;background:#183752;color:#fff;
+  border:0;border-radius:11px;font-size:12px;font-weight:700;
+}
+.refresh:disabled{opacity:.6;cursor:wait}
+.custom-dates{
+  display:none;grid-template-columns:1fr 1fr;
+  gap:15px;margin-top:15px;
+}
+.custom-dates.show{display:grid}
+.meta{
+  display:flex;justify-content:space-between;gap:12px;
+  flex-wrap:wrap;color:var(--muted);
+  font-size:12px;margin:0 3px 18px;
+}
+.error{
+  display:none;padding:14px 17px;border-radius:12px;
+  color:var(--red);background:var(--surface);
+  border:1px solid var(--red);margin-bottom:18px;font-size:13px;
+}
+.error.show{display:block}
 
-.kb-inner {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-}
+/* KPI */
 
-.kb-header {
-  width: 100%;
-  text-align: center;
-  font-family: 'Cairo', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 900;
-  letter-spacing: 6px;
-  background: linear-gradient(90deg, #4a7fd4, #a8c8ff, #4a7fd4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
-  padding: 4px 0 0;
+.kpis{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;margin-bottom:20px;
 }
-
-.keyboard-section::before {
-  content:'';
-  position:absolute; inset:0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
-  pointer-events:none;
+.kpi{
+  position:relative;overflow:hidden;min-height:145px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:19px;padding:20px;box-shadow:var(--shadow);
 }
-
-.kb-side-left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  direction: ltr;
-  min-width: 0;
-  padding: 8px 16px;
-  text-align: center;
+.kpi::before{
+  content:"";position:absolute;left:0;top:0;width:100%;height:4px;
 }
-.ksl-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.6rem;
-  letter-spacing: 5px;
-  color: #ffffff;
-  line-height: 1;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+.kpi.total::before{background:var(--blue)}
+.kpi.prod::before{background:var(--green)}
+.kpi.fail::before{background:var(--red)}
+.kpi.drop::before{background:var(--orange)}
+.kpi.pending::before{background:var(--pending)}
+.kpi.pass::before{background:var(--blue)}
+.kpi-top{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:12px;
 }
-.ksl-divider {
-  width: 36px;
-  height: 1.5px;
-  background: rgba(255,255,255,0.3);
-  border-radius: 2px;
-  margin: 2px auto;
+.kpi-label{font-size:12px;color:var(--muted);font-weight:700}
+.kpi-icon{
+  display:grid;place-items:center;height:38px;width:38px;
+  border-radius:11px;background:var(--soft);font-size:19px;
 }
-.ksl-title {
-  font-family: 'Cairo', sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
+.kpi strong{
+  display:block;font-size:34px;font-weight:800;margin-top:17px;
 }
-.ksl-sub {
-  font-family: 'Cairo', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 0.5px;
-}
-
-.kb-side-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  direction: ltr;
-  min-width: 0;
-  padding: 8px 16px;
-  text-align: center;
-}
-.ksr-clock {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.55);
-  letter-spacing: 1px;
-  white-space: nowrap;
-  text-align: center;
-}
-.ksr-company {
-  font-family: 'Cairo', sans-serif;
-  font-size: 0.62rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.35);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ksr-btn {
-  font-family: 'Cairo', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #ffffff;
-  background: rgba(255,255,255,0.1);
-  border: 1.5px solid rgba(255,255,255,0.25);
-  border-radius: 8px;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-.ksr-btn:hover {
-  background: rgba(255,255,255,0.2);
-  border-color: rgba(255,255,255,0.5);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+.kpi.prod strong{color:var(--green)}
+.kpi.fail strong{color:var(--red)}
+.kpi.drop strong{color:var(--orange)}
+.kpi.pending strong{color:var(--pending)}
+.kpi.pass strong{color:var(--blue)}
+.kpi-note{
+  display:block;font-size:11px;
+  color:var(--muted);margin-top:9px;
 }
 
-.kb-shell {
-  background: linear-gradient(135deg, #ffffff 0%, #e8eef8 40%, #c5d3ec 75%, #8eaad8 100%);
-  border: 1px solid var(--border2);
-  border-bottom: 4px solid rgba(28,69,135,0.25);
-  border-radius: 18px;
-  padding: 14px 14px 18px;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.8),
-    0 20px 60px rgba(28,69,135,0.12),
-    0 4px 16px rgba(28,69,135,0.08),
-    inset 0 1px 0 #fff;
-  display:flex; flex-direction:column; gap:5px;
-  direction:ltr; flex-shrink:0;
-  transform: scale(1);
-  transform-origin: top center;
-  margin-bottom: 0;
-  position: relative;
-  overflow: hidden;
+.status-cards{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:16px;margin-bottom:20px;
 }
+.status-card{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:15px;padding:16px 18px;box-shadow:var(--shadow);
+}
+.status-card-label{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;color:var(--muted);
+}
+.status-card strong{
+  display:block;font-size:19px;font-weight:800;margin-top:10px;
+}
+.status-card.prod strong{color:var(--green)}
+.status-card.pass strong{color:var(--blue)}
+.status-card.fail strong{color:var(--red)}
+.status-card.drop strong{color:var(--orange)}
+.status-card.pending strong{color:var(--pending)}
 
-.kb-shell > * {
-  position: relative;
-  z-index: 1;
-}
+/* CHARTS */
 
-.kb-top-row  { display:flex; gap:4px; align-items:flex-start; justify-content:space-between; width:100%; }
-.kb-body-row { display:flex; gap:10px; align-items:flex-start; margin-top:6px; }
-.kb-col      { display:flex; flex-direction:column; gap:4px; }
-.kb-row      { display:flex; gap:4px; align-items:flex-start; }
-
-.k {
-  display:flex; flex-direction:column;
-  align-items:flex-start; justify-content:flex-start;
-  padding:4px 5px 3px;
-  width:40px; height:40px;
-  background: linear-gradient(175deg, rgba(255,255,255,0.92) 0%, rgba(230,238,250,0.88) 100%);
-  border: 1px solid rgba(28,69,135,0.2);
-  border-bottom: 3px solid rgba(28,69,135,0.28);
-  border-radius: 6px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 3px rgba(28,69,135,0.12);
-  font-family:'JetBrains Mono', monospace;
-  font-size:10px; color:#1c4587;
-  user-select:none; flex-shrink:0; cursor:default;
-  transition: all 0.09s ease;
-  line-height:1.2; position:relative; overflow:hidden;
+.charts{
+  display:grid;grid-template-columns:1.15fr 1fr;gap:20px;
 }
-.k.gk { width:auto !important; height:auto !important; flex-shrink:1; }
-
-.k.mod {
-  background: linear-gradient(175deg, #f0f4fc 0%, #e6ecfa 100%);
-  border-color: rgba(28,69,135,0.18);
+.charts.single{grid-template-columns:1fr}
+.chart-panel{padding:24px;min-width:0}
+.legend{
+  display:flex;flex-wrap:wrap;gap:15px;
+  color:var(--muted);font-size:11px;margin-bottom:23px;
 }
-
-.k:hover:not(.lit) {
-  background: linear-gradient(175deg, #e8f0ff 0%, #dde8ff 100%) !important;
-  border-color: rgba(28,69,135,0.4) !important;
-  border-bottom-color: rgba(28,69,135,0.5) !important;
-  cursor:pointer;
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.dot{
+  display:inline-block;width:10px;height:10px;
+  border-radius:4px;flex-shrink:0;
 }
-
-.k .top  { font-size:8px;  color:var(--blue-lt); display:block; line-height:1.1; }
-.k .main { font-size:11px; font-weight:700; color:var(--blue); display:block; text-transform:uppercase; }
-.k .lg   { font-size:10px; color:var(--blue); display:block; font-weight:600; }
-.k .xl   { font-size:13px; color:var(--blue); font-weight:700; }
-.k .xs   { font-size:7.5px; color:var(--blue-mid); display:block; line-height:1.3; font-weight:600; }
-.k.center{ align-items:center; justify-content:center; }
-
-.k.lit {
-  background: #1c4587 !important;
-  border-color: #1c4587 !important;
-  border-bottom-color: #0d2648 !important;
-  border-bottom-width: 1px !important;
-  transform: translateY(2px) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.15),
-    inset 0 2px 6px rgba(0,0,0,0.2),
-    0 0 16px rgba(28,69,135,0.4),
-    0 0 36px rgba(28,69,135,0.2) !important;
-  z-index:5;
+.shift-chart{display:flex;flex-direction:column;gap:17px}
+.shift-row{
+  padding:16px;border:1px solid var(--line);
+  border-radius:14px;background:var(--surface);
 }
-.k.lit .top,.k.lit .main,.k.lit .lg,.k.lit .xl,.k.lit .xs { color:#fff !important; }
-.k.lit span { color:#fff !important; }
-
-.kb-title {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px;
+.shift-head{
+  display:flex;justify-content:space-between;
+  gap:10px;margin-bottom:12px;
 }
-.kb-title-main {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 4px;
-  color: var(--blue);
+.shift-head strong{font-size:13px;font-weight:800}
+.shift-head span{font-size:12px;color:var(--muted)}
+.stack{
+  display:flex;height:25px;border-radius:7px;
+  background:var(--soft);overflow:hidden;
 }
-.kb-title-sub {
-  font-family: 'Cairo', sans-serif;
-  font-size: 8px;
-  letter-spacing: 2px;
-  color: var(--blue-lt);
-  font-weight: 300;
+.stack-part{
+  height:100%;min-width:0;transition:width .4s ease;
 }
-.led-strip { display:flex; flex-direction:row; align-items:center; gap:8px; padding:4px 10px; align-self:center; height:28px; }
-.led-item  { display:flex; flex-direction:column; align-items:center; gap:2px; }
-.led-dot   { width:7px; height:7px; border-radius:50%; background:#d0d8ea; box-shadow:inset 0 1px 2px rgba(0,0,0,0.15); transition:all 0.2s; }
-.led-dot.on { background:var(--blue); box-shadow:inset 0 1px 1px rgba(0,0,0,0.1),0 0 6px rgba(28,69,135,0.7),0 0 16px rgba(28,69,135,0.3); }
-.led-lbl   { font-family:'JetBrains Mono',monospace; font-size:6.5px; color:var(--text-dimmer); letter-spacing:0.5px; text-transform:uppercase; }
-
-.shortcuts-section {
-  position:relative; z-index:10;
-  width: 100%;
-  min-width: 0;
-  padding: 20px 20px 0 20px;
-  animation: none;
+.shift-stats{
+  display:flex;flex-wrap:wrap;gap:12px;
+  margin-top:12px;color:var(--muted);font-size:11px;
 }
-
-.big-card {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 18px;
-  overflow: visible;
-  box-shadow: 0 4px 32px rgba(28,69,135,0.08);
-  opacity: 1;
-  animation: none;
-  direction: rtl;
+.simple-compare{display:grid;gap:15px}
+.compare-row{
+  border:1px solid var(--line);border-radius:14px;padding:16px;
 }
-.big-card::before {
-  content:'';
-  display:block; height:3px;
-  background: linear-gradient(90deg, var(--blue), var(--blue-lt));
-  border-radius: 18px 18px 0 0;
+.compare-row.own{
+  border-color:var(--blue);background:var(--soft);
 }
-
-.cat-section { border-bottom: 1px solid var(--border); position: relative; }
-.cat-section:last-child { border-bottom: none; }
-
-.cat-label {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 22px;
-  background: linear-gradient(90deg, #f0f5ff, #fafcff);
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  direction: ltr;
+.compare-title{
+  display:flex;justify-content:space-between;
+  gap:12px;font-size:13px;margin-bottom:12px;
 }
-.cat-label::before {
-  content:'';
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px; background: var(--blue);
+.compare-title span{color:var(--muted)}
+.compare-stat{margin-top:11px}
+.compare-stat-head{
+  display:flex;justify-content:space-between;
+  font-size:11px;color:var(--muted);margin-bottom:6px;
 }
-.cat-label.gold::before { background: #d97706; }
-.cat-label.gold .cat-name {
-  color: #000;
-  background: #fef08a;
-  border-radius: 20px;
-  padding: 2px 12px;
+.compare-track{
+  height:9px;border-radius:99px;
+  background:var(--soft);overflow:hidden;
 }
-.cat-badge {
-  font-family:'Cairo', sans-serif;
-  font-size: 15px; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase;
-  color: #000;
-  background: #fef08a;
-  border: none;
-  border-radius: 20px;
-  padding: 2px 12px;
+.compare-fill{height:100%;border-radius:99px}
+.analysis-grid{
+  display:grid;grid-template-columns:220px 1fr;
+  gap:23px;align-items:center;
 }
-
-.cat-name {
-  font-family:'Cairo', sans-serif;
-  font-size:15px; font-weight:900;
-  color: #000; letter-spacing:3px; text-transform:uppercase;
+.donut{
+  width:210px;aspect-ratio:1;margin:auto;
+  background:var(--soft);border-radius:50%;
+  display:grid;place-items:center;position:relative;
 }
-
-.items-wrapper { padding: 4px 8px 8px; }
-
-.shortcut-item {
-  display:flex; align-items:center; gap:16px;
-  padding: 10px 14px; border-radius:8px;
-  border:1px solid transparent; cursor:pointer;
-  transition:all 0.12s ease;
-  direction:rtl;
+.donut::after{
+  content:"";position:absolute;inset:20%;
+  border-radius:50%;background:var(--surface);
 }
-.shortcut-item:hover { background:#f0f6ff; border-color:rgba(28,69,135,0.12); }
-
-.note-red {
-  display: block;
-  font-size: 0.85rem;
-  color: #c0392b;
-  font-weight: 700;
-  margin-top: 2px;
-  text-align: right;
+.donut-center{z-index:1;text-align:center}
+.donut-center strong{display:block;font-size:32px;font-weight:800}
+.donut-center span{color:var(--muted);font-size:11px}
+.status-list{display:flex;flex-direction:column;gap:17px}
+.status-head{
+  display:flex;justify-content:space-between;
+  gap:10px;align-items:center;margin-bottom:8px;
 }
-
-.note-orange {
-  display: block;
-  font-size: 0.85rem;
-  color: #b45309;
-  font-weight: 700;
-  margin-top: 2px;
-  text-align: right;
+.status-name{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;
 }
-
-.shortcut-item.important {
-  background: transparent;
-  border-color: transparent;
+.status-value{
+  color:var(--muted);font-size:11px;
+  font-weight:700;white-space:nowrap;
 }
-.shortcut-item.important:hover {
-  background: #f0f6ff;
-  border-color: rgba(28,69,135,0.12);
+.track{
+  height:9px;border-radius:20px;
+  background:var(--soft);overflow:hidden;
 }
-.shortcut-item.important .desc {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
+.fill{
+  height:100%;width:0;border-radius:20px;
+  transition:width .4s ease;
 }
-.shortcut-item.important .desc-inner {
-  background: #fef08a;
-  border-radius: 20px;
-  padding: 2px 12px;
-  color: #000;
-  display: inline-block;
-  font-size: 15px;
+.note{
+  color:var(--muted);font-size:11px;margin:23px 0 0;
+  padding-top:15px;border-top:1px solid var(--line);line-height:1.8;
 }
-
-.desc { font-size:15px; color:var(--text); line-height:1.4; flex:1; text-align:right; font-weight:700; }
-.shortcut-item:hover .desc { color:var(--text); }
-
-.en-tag {
-  flex-shrink: 0;
-  font-family:'Cairo', sans-serif;
-  font-size:15px; font-weight:700;
-  color: var(--blue);
-  background: var(--blue-xl);
-  border: 1px solid rgba(28,69,135,0.2);
-  border-radius: 6px;
-  padding: 3px 10px;
-  opacity: 0;
-  pointer-events: none;
-  white-space: nowrap;
-  letter-spacing: 0.5px;
-  transform: translateX(8px);
-  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+.member-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;margin-bottom:20px;
 }
-.shortcut-item:hover .en-tag {
-  opacity: 1;
-  transform: translateX(0);
+.member-summary{padding:24px;margin-bottom:20px}
+.member-summary h2{margin:0 0 7px;font-size:17px}
+.member-summary p{margin:0;color:var(--muted);font-size:12px}
+.footer{
+  display:flex;justify-content:space-between;
+  gap:10px;flex-wrap:wrap;color:var(--muted);
+  padding:22px 4px 5px;font-size:12px;
 }
-.shortcut-item { position: relative; }
-
-.keys-combo {
-  direction:ltr; display:flex; gap:3px; align-items:center;
-  flex-shrink:0; min-width:130px; justify-content:flex-start;
+.footer strong{color:var(--text)}
+@media(max-width:1150px){
+  .charts{grid-template-columns:1fr}
+  .status-cards{grid-template-columns:repeat(3,1fr)}
 }
-
-.key-badge {
-  display:inline-flex; align-items:center; justify-content:center;
-  background: linear-gradient(175deg, #fff 0%, #f0f4fd 100%);
-  border: 1px solid rgba(28,69,135,0.2);
-  border-bottom: 2px solid rgba(28,69,135,0.28);
-  border-radius:6px; padding:4px 10px;
-  font-family:'Cairo', sans-serif;
-  font-weight:700; font-size:15px; color: var(--blue);
-  white-space:nowrap; box-shadow:inset 0 1px 0 #fff;
-}
-.shortcut-item:hover .key-badge { background:var(--blue-xl); border-color:rgba(28,69,135,0.35); }
-
-.en-word { color: #1c4587; font-weight: 900; }
-.plus-sign { color:var(--text-dimmer); font-size:0.8rem; font-family:'Cairo',sans-serif; }
-.divider   { width:1px; height:18px; background:var(--border); flex-shrink:0; }
-
-.footer {
-  position:relative; z-index:10; margin-top:56px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.62rem; color:var(--text-dimmer);
-  display:flex; align-items:center; gap:14px; letter-spacing:2px;
-}
-.footer::before,.footer::after { content:''; display:block; height:1px; width:50px; background:linear-gradient(90deg,transparent,var(--border2)); }
-
-@keyframes fadeDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
-@keyframes fadeUp   { from{opacity:0;transform:translateY(10px)}  to{opacity:1;transform:none} }
-
-::-webkit-scrollbar { width:5px; height:5px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:rgba(28,69,135,0.15); border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background:rgba(28,69,135,0.35); }
-
 @media(max-width:900px){
-  .shortcuts-grid{grid-template-columns:1fr;}
-  .header h1{font-size:3.2rem;}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .status-cards{grid-template-columns:repeat(2,1fr)}
+  .member-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .app{padding:12px}.header{padding:20px}
+  .header-top{align-items:flex-start;flex-direction:column}
+  .brand{gap:12px}.meti-logo svg{width:145px}
+  .brand-divider{height:35px}.brand-text h1{font-size:18px}
+  .header-actions{width:100%;flex-wrap:wrap}
+  .filters,.custom-dates{grid-template-columns:1fr}
+  .analysis-grid{grid-template-columns:1fr;gap:25px}
+  .kpis{gap:10px}.kpi{padding:15px}.kpi strong{font-size:27px}
+  .member-grid{gap:10px}
+  .chart-panel,.filter-panel{padding:18px}
+}
+@media(max-width:420px){
+  .brand{flex-wrap:wrap}.brand-divider{display:none}
+  .brand-text{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important}
 }
 </style>
 </head>
+
 <body>
 
-<div class="keyboard-section">
-  <div class="kb-header">Lidar Shortcuts In Gulp</div>
-  <div class="kb-inner">
-    <div class="kb-side-left">
-      <div class="ksr-clock" id="clock"></div>
-      <div class="ksr-company">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        Micro Engineering Tech Inc.
+<section class="auth-screen" id="authScreen">
+  <div class="auth-shell">
+
+    <div class="auth-brand">
+      <div class="meti-logo" id="loginLogo"></div>
+      <h1>New Hire Analytics</h1>
+      <p>Training Dashboard</p>
+    </div>
+
+    <div class="panel auth-card">
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="signInTab" type="button">
+          Sign In
+        </button>
+        <button class="auth-tab" id="signUpTab" type="button">
+          Sign Up
+        </button>
+      </div>
+
+      <h2 id="authTitle">Welcome Back</h2>
+      <p class="auth-sub" id="authSubtitle">
+        Sign in to your dashboard
+      </p>
+
+      <form id="authForm">
+
+        <div class="auth-fields">
+
+          <div class="field">
+            <label for="authName">NAME</label>
+            <input
+              id="authName"
+              type="text"
+              placeholder="Enter your name"
+              autocomplete="name"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="authPassword">PASSWORD</label>
+
+            <div class="password-wrap">
+              <input
+                id="authPassword"
+                type="password"
+                placeholder="Enter Password"
+                autocomplete="current-password"
+                required
+              >
+              <button
+                class="eye-button"
+                type="button"
+                data-toggle-password="authPassword"
+                aria-label="Show password"
+              >👁</button>
+            </div>
+          </div>
+
+          <div class="field" id="confirmField" hidden>
+            <label for="authConfirm">CONFIRM PASSWORD</label>
+
+            <div class="password-wrap">
+              <input
+                id="authConfirm"
+                type="password"
+                placeholder="Confirm Password"
+                autocomplete="new-password"
+              >
+              <button
+                class="eye-button"
+                type="button"
+                data-toggle-password="authConfirm"
+                aria-label="Show password"
+              >👁</button>
+            </div>
+          </div>
+
+        </div>
+
+        <button class="auth-button" id="authButton" type="submit">
+          Sign In
+        </button>
+
+        <div
+          class="auth-message"
+          id="authMessage"
+          role="status"
+          hidden
+        ></div>
+
+      </form>
+    </div>
+
+    <div class="auth-theme">
+      <button type="button" id="loginThemeToggle">
+        ☾ Dark Mode
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<main class="app" id="dashboard" hidden>
+
+  <header class="header">
+    <div class="header-top">
+
+      <div class="brand">
+        <div class="meti-logo" id="headerLogo"></div>
+        <div class="brand-divider"></div>
+
+        <div class="brand-text">
+          <h1>New Hire Analytics</h1>
+          <p id="userInfo">Training Dashboard</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+
+        <div class="connection">
+          <span class="connection-dot" id="connectionDot"></span>
+          <span id="connectionText">Connecting...</span>
+        </div>
+
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+        >
+          <span id="themeIcon">☾</span>
+          <span id="themeText">Dark Mode</span>
+        </button>
+
+        <button
+          class="logout-btn"
+          id="logoutButton"
+          type="button"
+        >
+          Log Out
+        </button>
+
       </div>
     </div>
-    <div class="kb-shell" id="shell"></div>
-    <div class="kb-side-right">
-      <div class="ksl-logo">METI</div>
-      <div class="ksl-divider" style="align-self:flex-end;"></div>
-      <div class="ksl-title">Micro Engineering</div>
-      <div class="ksl-sub">Labeling Operations · Internal System</div>
+  </header>
+
+  <section class="panel filter-panel">
+
+    <div class="section-head">
+      <h2>Dashboard Filters</h2>
     </div>
+
+    <div class="filters">
+
+      <div class="field" id="shiftFilterField">
+        <label for="shift">SHIFT</label>
+        <select id="shift">
+          <option value="all">All Shifts</option>
+          <option value="Morning">Morning</option>
+          <option value="Night">Night</option>
+          <option value="Over_Night">Overnight</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="period">PERIOD</label>
+        <select id="period">
+          <option value="this-week">This Week</option>
+          <option value="last-week">Last Week</option>
+          <option value="this-month">This Month</option>
+          <option value="last-month">Last Month</option>
+          <option value="custom">Custom Date Range</option>
+          <option value="all-time">All Time</option>
+        </select>
+      </div>
+
+      <button
+        class="refresh"
+        id="refresh"
+        type="button"
+      >
+        ↻ Refresh
+      </button>
+
+    </div>
+
+    <div class="custom-dates" id="customDates">
+      <div class="field">
+        <label for="from">FROM DATE</label>
+        <input type="date" id="from">
+      </div>
+      <div class="field">
+        <label for="to">TO DATE</label>
+        <input type="date" id="to">
+      </div>
+    </div>
+
+  </section>
+
+  <div class="error" id="error" role="alert"></div>
+
+  <div class="meta">
+    <span id="periodInfo">Loading dashboard...</span>
+    <span id="updatedAt"></span>
   </div>
-</div>
 
-<div class="shortcuts-section">
-  <div class="big-card" id="list"></div>
-</div>
+  <section class="kpis" id="managementKpis">
 
-<div class="footer">— HOVER TO HIGHLIGHT — KEYBOARD INTERACTIVE —</div>
+    <article class="kpi total">
+      <div class="kpi-top">
+        <span class="kpi-label">Total New Hires</span>
+        <span class="kpi-icon">♟</span>
+      </div>
+      <strong id="total">—</strong>
+      <span class="kpi-note">Including Pending</span>
+    </article>
+
+    <article class="kpi prod">
+      <div class="kpi-top">
+        <span class="kpi-label">Production Rate</span>
+        <span class="kpi-icon">↗</span>
+      </div>
+      <strong id="productionRate">—</strong>
+      <span class="kpi-note">Production performance</span>
+    </article>
+
+    <article class="kpi fail">
+      <div class="kpi-top">
+        <span class="kpi-label">Failed Rate</span>
+        <span class="kpi-icon">×</span>
+      </div>
+      <strong id="failedRate">—</strong>
+      <span class="kpi-note">Failed new hires</span>
+    </article>
+
+    <article class="kpi drop">
+      <div class="kpi-top">
+        <span class="kpi-label">Drop Out Rate</span>
+        <span class="kpi-icon">↘</span>
+      </div>
+      <strong id="dropOutRate">—</strong>
+      <span class="kpi-note">Training dropouts</span>
+    </article>
+
+  </section>
+
+  <section class="status-cards" id="statusCards">
+
+    <article class="status-card prod">
+      <span class="status-card-label">
+        <i class="dot" style="background:var(--green)"></i>
+        Production
+      </span>
+      <strong id="statusProdValue">—</strong>
+    </article>
+
+    <article class="status-card pass">
+      <span class="status-card-label">
+        <i class="dot" style="background:var(--blue)"></i>
+        Pass
+      </span>
+      <strong id="statusPassValue">—</strong>
+    </article>
+
+    <article class="status-card fail">
+      <span class="status-card-label">
+        <i class="dot" style="background:var(--red)"></i>
+        Faild
+      </span>
+      <strong id="statusFailValue">—</strong>
+    </article>
+
+    <article class="status-card drop">
+      <span class="status-card-label">
+        <i class="dot" style="background:var(--orange)"></i>
+        Drop Out
+      </span>
+      <strong id="statusDropValue">—</strong>
+    </article>
+
+    <article class="status-card pending">
+      <span class="status-card-label">
+        <i class="dot" style="background:var(--pending)"></i>
+        Pending
+      </span>
+      <strong id="statusPendingValue">—</strong>
+    </article>
+
+  </section>
+
+  <section id="memberView" hidden>
+
+    <div class="panel member-summary">
+      <h2>Training Status</h2>
+      <p>New hires by State for the selected period</p>
+    </div>
+
+    <div class="member-grid">
+
+      <article class="kpi total">
+        <div class="kpi-top">
+          <span class="kpi-label">Total New Hires</span>
+          <span class="kpi-icon">♟</span>
+        </div>
+        <strong id="memberTotal">—</strong>
+        <span class="kpi-note">Including Pending</span>
+      </article>
+
+      <article class="kpi prod">
+        <div class="kpi-top">
+          <span class="kpi-label">Production</span>
+          <span class="kpi-icon">↗</span>
+        </div>
+        <strong id="memberP">—</strong>
+        <span class="kpi-note">State: P</span>
+      </article>
+
+      <article class="kpi pass">
+        <div class="kpi-top">
+          <span class="kpi-label">Pass</span>
+          <span class="kpi-icon">✓</span>
+        </div>
+        <strong id="memberPass">—</strong>
+        <span class="kpi-note">State: Pass</span>
+      </article>
+
+      <article class="kpi drop">
+        <div class="kpi-top">
+          <span class="kpi-label">Drop Out</span>
+          <span class="kpi-icon">↘</span>
+        </div>
+        <strong id="memberDrop">—</strong>
+        <span class="kpi-note">State: Drop Out</span>
+      </article>
+
+      <article class="kpi fail">
+        <div class="kpi-top">
+          <span class="kpi-label">Faild</span>
+          <span class="kpi-icon">×</span>
+        </div>
+        <strong id="memberFail">—</strong>
+        <span class="kpi-note">State: Faild</span>
+      </article>
+
+      <article class="kpi pending">
+        <div class="kpi-top">
+          <span class="kpi-label">Pending</span>
+          <span class="kpi-icon">◷</span>
+        </div>
+        <strong id="memberPending">—</strong>
+        <span class="kpi-note">State: Pending</span>
+      </article>
+
+    </div>
+  </section>
+
+  <div class="charts" id="charts">
+
+    <section
+      class="panel chart-panel"
+      id="comparison"
+      hidden
+    >
+
+      <div class="section-head">
+        <div>
+          <h2>Shift Performance</h2>
+          <p id="comparisonSubtitle">
+            Comparison for the selected period
+          </p>
+        </div>
+        <span class="tag" id="comparisonTag">
+          ALL SHIFTS
+        </span>
+      </div>
+
+      <div class="legend">
+        <span>
+          <i class="dot" style="background:var(--green)"></i>
+          Production
+        </span>
+        <span>
+          <i class="dot" style="background:var(--blue)"></i>
+          Pass
+        </span>
+        <span>
+          <i class="dot" style="background:var(--orange)"></i>
+          Drop Out
+        </span>
+        <span>
+          <i class="dot" style="background:var(--red)"></i>
+          Faild
+        </span>
+      </div>
+
+      <div class="shift-chart" id="shiftChart">
+        Loading shift comparison...
+      </div>
+
+    </section>
+
+    <section
+      class="panel chart-panel"
+      id="analysis"
+    >
+
+      <div class="section-head">
+        <div>
+          <h2>Status Analysis</h2>
+          <p>Selected shift and period</p>
+        </div>
+        <span class="tag">DISTRIBUTION</span>
+      </div>
+
+      <div class="analysis-grid">
+
+        <div class="donut" id="donut">
+          <div class="donut-center">
+            <strong id="donutTotal">—</strong>
+            <span>Total</span>
+          </div>
+        </div>
+
+        <div class="status-list">
+
+          <div>
+            <div class="status-head">
+              <span class="status-name">
+                <i class="dot" style="background:var(--green)"></i>
+                Production
+              </span>
+              <span class="status-value" id="pValue">—</span>
+            </div>
+            <div class="track">
+              <div class="fill" id="pBar" style="background:var(--green)"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="status-head">
+              <span class="status-name">
+                <i class="dot" style="background:var(--blue)"></i>
+                Pass
+              </span>
+              <span class="status-value" id="passValue">—</span>
+            </div>
+            <div class="track">
+              <div class="fill" id="passBar" style="background:var(--blue)"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="status-head">
+              <span class="status-name">
+                <i class="dot" style="background:var(--orange)"></i>
+                Drop Out
+              </span>
+              <span class="status-value" id="dropValue">—</span>
+            </div>
+            <div class="track">
+              <div class="fill" id="dropBar" style="background:var(--orange)"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="status-head">
+              <span class="status-name">
+                <i class="dot" style="background:var(--red)"></i>
+                Faild
+              </span>
+              <span class="status-value" id="failValue">—</span>
+            </div>
+            <div class="track">
+              <div class="fill" id="failBar" style="background:var(--red)"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="status-head">
+              <span class="status-name">
+                <i class="dot" style="background:var(--pending)"></i>
+                Pending
+              </span>
+              <span class="status-value" id="pendingValue">—</span>
+            </div>
+            <div class="track">
+              <div class="fill" id="pendingBar" style="background:var(--pending)"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <p class="note">
+        Total includes Pending. Performance rates exclude Pending.
+      </p>
+
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <span>METI · New Hire Analytics</span>
+    <span>Designed by <strong>Eslam Salah</strong></span>
+  </footer>
+
+</main>
 
 <script>
-const keyMap={};
-const U=40,G=4;
+const API_URL =
+  'https://script.google.com/macros/s/AKfycby8pz-ON6N1chPOb-nAjlY62k34AkIwy2D-QrcMd-djs86kIecUBWKeYsFOvTQV5pQJ/exec';
 
-function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e;}
-function makeKey(w,h,cls,html,code){
-  const e=el('div','k'+(cls?' '+cls:''));
-  e.style.width=w+'px';e.style.height=h+'px';
-  if(html!==undefined)e.innerHTML=html;
-  if(code){Array.isArray(code)?code.forEach(c=>keyMap[c]=e):keyMap[code]=e;}
-  return e;
-}
-const K=(cls,html,code)=>makeKey(U,U,cls,html,code);
-const W=(w,cls,html,code)=>makeKey(w,U,cls,html,code);
-const F=(w,cls,html,code)=>makeKey(w,28,cls,html,code);
-function row(...items){const r=el('div','kb-row');items.forEach(i=>i&&r.appendChild(i));return r;}
-function gap(w){const s=document.createElement('div');s.style.cssText=`width:${w}px;flex-shrink:0;`;return s;}
-const CK=(t,b)=>`<span class="top">${t}</span><span class="main">${b}</span>`;
-const LG=t=>`<span class="lg">${t}</span>`;
-const XL=t=>`<span class="xl">${t}</span>`;
-const XS=t=>`<span class="xs">${t}</span>`;
+const $ = id => document.getElementById(id);
 
-const shell=document.getElementById('shell');
-
-const fnMain=row(
-  F(28,'mod',LG('Esc'),'Escape'),gap(8),
-  F(U,'mod',LG('F1'),'F1'),F(U,'mod',LG('F2'),'F2'),F(U,'mod',LG('F3'),'F3'),F(U,'mod',LG('F4'),'F4'),gap(6),
-  F(U,'mod',LG('F5'),'F5'),F(U,'mod',LG('F6'),'F6'),F(U,'mod',LG('F7'),'F7'),F(U,'mod',LG('F8'),'F8'),gap(6),
-  F(U,'mod',LG('F9'),'F9'),F(U,'mod',LG('F10'),'F10'),F(U,'mod',LG('F11'),'F11'),F(U,'mod',LG('F12'),'F12'),
-);
-const ledStrip=el('div','led-strip');
-ledStrip.innerHTML=`
-  <div class="led-item"><span class="led-dot" id="led0"></span><span class="led-lbl">Num</span></div>
-  <div class="led-item"><span class="led-dot" id="led1"></span><span class="led-lbl">Caps</span></div>
-  <div class="led-item"><span class="led-dot" id="led2"></span><span class="led-lbl">Scr</span></div>`;
-const topRow=el('div','kb-top-row');
-const kbTitle=el('div','kb-title');
-kbTitle.innerHTML=`<div class="kb-title-main">Shortcuts Keys</div><div class="kb-title-sub">Meti · Micro Engineering</div>`;
-topRow.appendChild(fnMain);topRow.appendChild(kbTitle);topRow.appendChild(ledStrip);
-
-const mainWrapper=document.createElement('div');
-mainWrapper.style.cssText='position:relative;display:flex;flex-direction:column;gap:4px;';
-
-const r1=row(
-  K('',CK('~','`'),'Backquote'),
-  K('',CK('!','1'),'Digit1'),K('',CK('@','2'),'Digit2'),K('',CK('#','3'),'Digit3'),
-  K('',CK('$','4'),'Digit4'),K('',CK('%','5'),'Digit5'),K('',CK('^','6'),'Digit6'),
-  K('',CK('&','7'),'Digit7'),K('',CK('*','8'),'Digit8'),K('',CK('(','9'),'Digit9'),
-  K('',CK(')','0'),'Digit0'),K('',CK('_','-'),'Minus'),K('',CK('+','='),'Equal'),
-  W(79,'mod',LG('Backspace'),'Backspace'),
-);
-
-const rows23=document.createElement('div');
-rows23.style.cssText='display:flex;flex-direction:row;align-items:flex-start;gap:4px;';
-const keysCol=document.createElement('div');
-keysCol.style.cssText='display:flex;flex-direction:column;gap:4px;';
-
-const _r2=el('div','kb-row');
-_r2.appendChild(makeKey(50,U,'mod',LG('Tab'),'Tab'));
-['Q','W','E','R','T','Y','U','I','O','P'].forEach(k=>_r2.appendChild(makeKey(U,U,'',CK(k,k.toLowerCase()),`Key${k}`)));
-_r2.appendChild(makeKey(U,U,'',CK('{','['),'BracketLeft'));
-_r2.appendChild(makeKey(U,U,'',CK('}',']'),'BracketRight'));
-
-const _r3=el('div','kb-row');
-_r3.appendChild(makeKey(60,U,'mod',LG('Caps Lock'),'CapsLock'));
-[['A','KeyA'],['S','KeyS'],['D','KeyD'],['F','KeyF'],['G','KeyG'],['H','KeyH'],['J','KeyJ'],['K','KeyK'],['L','KeyL']].forEach(([k,c])=>_r3.appendChild(makeKey(U,U,'',CK(k,k.toLowerCase()),c)));
-_r3.appendChild(makeKey(U,U,'',CK(':',';'),'Semicolon'));
-_r3.appendChild(makeKey(U,U,'',CK('"',"'"),'Quote'));
-_r3.appendChild(makeKey(U,U,'',CK('|','\\'),'Backslash'));
-
-keysCol.appendChild(_r2);keysCol.appendChild(_r3);
-rows23.appendChild(keysCol);
-
-const enterEl=el('div','k mod');
-enterEl.style.cssText=`width:65px;height:${U*2+G}px;margin-left:-8px;
-  clip-path:polygon(0% 0%,100% 0%,100% 100%,20.5% 100%,20.5% 47.6%,0% 47.6%);
-  display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;`;
-enterEl.innerHTML=`<span class="enter-arrow" style="font-size:15px;font-weight:700;color:#1c4587;">↵</span><span class="enter-lbl" style="font-size:8px;font-weight:600;color:#1c4587;">Enter</span>`;
-
-enterEl._litOverride = function(on){
-  if(on){
-    enterEl.style.background='#1c4587';
-    enterEl.style.borderColor='#1c4587';
-    enterEl.style.borderBottomColor='#0d2648';
-    enterEl.style.borderBottomWidth='1px';
-    enterEl.style.transform='translateY(2px)';
-    enterEl.querySelectorAll('span').forEach(s=>s.style.color='#fff');
-  } else {
-    enterEl.style.background='';
-    enterEl.style.borderColor='';
-    enterEl.style.borderBottomColor='';
-    enterEl.style.borderBottomWidth='';
-    enterEl.style.transform='';
-    enterEl.querySelectorAll('span').forEach(s=>s.style.color='#1c4587');
-  }
-};
-keyMap['Enter']=enterEl;
-rows23.appendChild(enterEl);
-
-const r4=row(
-  W(54,'mod',LG('⇧ Shift'),'ShiftLeft'),
-  K('',CK('|','\\'),'IntlBackslash'),K('',CK('Z','z'),'KeyZ'),K('',CK('X','x'),'KeyX'),K('',CK('C','c'),'KeyC'),
-  K('',CK('V','v'),'KeyV'),K('',CK('B','b'),'KeyB'),K('',CK('N','n'),'KeyN'),
-  K('',CK('M','m'),'KeyM'),K('',CK('<',','),'Comma'),K('',CK('>','.'),'Period'),
-  K('',CK('?','/'),'Slash'),
-  W(109,'mod',LG('Shift ⇧'),'ShiftRight'),
-);
-const r5=row(
-  W(54,'mod',LG('Ctrl'),'ControlLeft'),W(U,'mod',LG('⊞'),'MetaLeft'),
-  W(54,'mod',LG('Alt'),'AltLeft'),W(292,'mod center','','Space'),
-  W(54,'mod',LG('Alt Gr'),'AltRight'),W(U,'mod',LG('⊞'),'MetaRight'),
-  W(U,'mod',LG('☰'),'ContextMenu'),W(49,'mod',LG('Ctrl'),'ControlRight'),
-);
-[r1,rows23,r4,r5].forEach(r=>mainWrapper.appendChild(r));
-
-const navWrapper=document.createElement('div');
-navWrapper.style.cssText=`display:grid;grid-template-columns:repeat(3,${U}px);grid-template-rows:28px ${G}px ${U}px ${U}px ${G+U}px ${U}px;gap:${G}px 4px;`;
-function nk(c,r,cls,html,code){
-  const e=el('div','k gk'+(cls?' '+cls:''));
-  e.style.gridColumn=String(c);e.style.gridRow=String(r);
-  e.style.width='auto';e.style.height='auto';e.style.margin='0';
-  if(html!==undefined)e.innerHTML=html;if(code)keyMap[code]=e;return e;
-}
-navWrapper.appendChild(nk(1,1,'mod fn',XS('Print')+XS('Scrn'),'PrintScreen'));
-navWrapper.appendChild(nk(2,1,'mod fn',XS('Scroll')+XS('Lock'),'ScrollLock'));
-navWrapper.appendChild(nk(3,1,'mod fn',XS('Pause')+XS('Break'),'Pause'));
-navWrapper.appendChild(nk(1,3,'mod',XS('Insert'),'Insert'));
-navWrapper.appendChild(nk(2,3,'mod',XS('Home'),'Home'));
-navWrapper.appendChild(nk(3,3,'mod',XS('Pg Up'),'PageUp'));
-navWrapper.appendChild(nk(1,4,'mod',XS('Delete'),'Delete'));
-navWrapper.appendChild(nk(2,4,'mod',XS('End'),'End'));
-navWrapper.appendChild(nk(3,4,'mod',XS('Pg Dn'),'PageDown'));
-navWrapper.appendChild(nk(2,5,'mod center',XL('▲'),'ArrowUp'));
-navWrapper.appendChild(nk(1,6,'mod center',XL('◀'),'ArrowLeft'));
-navWrapper.appendChild(nk(2,6,'mod center',XL('▼'),'ArrowDown'));
-navWrapper.appendChild(nk(3,6,'mod center',XL('▶'),'ArrowRight'));
-
-const numpadWrapper=document.createElement('div');
-numpadWrapper.style.cssText=`display:grid;grid-template-columns:repeat(4,${U}px);grid-template-rows:repeat(5,${U}px);gap:${G}px;`;
-function gk(col,row,colSpan,rowSpan,cls,html,code){
-  const e=el('div','k gk'+(cls?' '+cls:''));
-  e.style.gridColumn=colSpan>1?`${col} / span ${colSpan}`:String(col);
-  e.style.gridRow=rowSpan>1?`${row} / span ${rowSpan}`:String(row);
-  e.style.width='auto';e.style.height='auto';
-  if(html!==undefined)e.innerHTML=html;
-  if(code){Array.isArray(code)?code.forEach(c=>keyMap[c]=e):keyMap[code]=e;}
-  return e;
-}
-numpadWrapper.appendChild(gk(1,1,1,1,'mod',XS('Num')+LG('Lock'),'NumLock'));
-numpadWrapper.appendChild(gk(2,1,1,1,'mod center',LG('/'),'NumpadDivide'));
-numpadWrapper.appendChild(gk(3,1,1,1,'mod center',LG('*'),'NumpadMultiply'));
-numpadWrapper.appendChild(gk(4,1,1,1,'mod center',LG('−'),'NumpadSubtract'));
-numpadWrapper.appendChild(gk(1,2,1,1,'',CK('Home','7'),'Numpad7'));
-numpadWrapper.appendChild(gk(2,2,1,1,'',CK('↑','8'),'Numpad8'));
-numpadWrapper.appendChild(gk(3,2,1,1,'',CK('PgUp','9'),'Numpad9'));
-numpadWrapper.appendChild(gk(4,2,1,2,'mod center',LG('+'),'NumpadAdd'));
-numpadWrapper.appendChild(gk(1,3,1,1,'',CK('←','4'),'Numpad4'));
-numpadWrapper.appendChild(gk(2,3,1,1,'center',CK('','5'),'Numpad5'));
-numpadWrapper.appendChild(gk(3,3,1,1,'',CK('→','6'),'Numpad6'));
-numpadWrapper.appendChild(gk(1,4,1,1,'',CK('End','1'),'Numpad1'));
-numpadWrapper.appendChild(gk(2,4,1,1,'',CK('↓','2'),'Numpad2'));
-numpadWrapper.appendChild(gk(3,4,1,1,'',CK('PgDn','3'),'Numpad3'));
-numpadWrapper.appendChild(gk(4,4,1,2,'mod center',LG('Enter'),'NumpadEnter'));
-numpadWrapper.appendChild(gk(1,5,2,1,'',CK('Ins','0'),'Numpad0'));
-numpadWrapper.appendChild(gk(3,5,1,1,'',CK('Del','.'),'NumpadDecimal'));
-
-const bodyRow=el('div','kb-body-row');
-bodyRow.appendChild(mainWrapper);bodyRow.appendChild(navWrapper);bodyRow.appendChild(numpadWrapper);
-shell.appendChild(topRow);shell.appendChild(bodyRow);
-
-const shortcuts=[
-  {cat:'General',items:[
-    {keysText:'Ctrl + Z',codes:['ControlLeft','KeyZ'],desc:'لو عملت حاجه منغير قصد هترجع خطوه لورا',en:'Undo',important:true},
-    {keysText:'Ctrl + Shift + Z',codes:['ControlLeft','ShiftLeft','KeyZ'],desc:'لو رجعت خطوه لورا منغير قصد وعاوز ترجع لقدام',en:'Redo'},
-    {keysText:'Ctrl + S',codes:['ControlLeft','KeyS'],desc:'Save',en:'Save',important:true},
-    {keysText:'Tab',codes:['Tab'],desc:'لما تبقي عامل Select علي Object بينقلك علي الـ Object اللي بعده',en:'Next Object'},
-    {keysText:'Shift + Tab',codes:['ShiftLeft','Tab'],desc:'لما تبقي عامل Select علي Object بينقلك علي الـ Object اللي قبله',en:'Prev Object'},
-    {keysText:'Ctrl + Enter',codes:['ControlRight','Enter'],desc:'بيعمل Check Mark علامه الصح للـ Object',en:'Check Mark'},
-    {keysText:'Esc',codes:['Escape'],desc:'تقدر تطلع من Select الـ Object',en:'Exit'},
-  ]},
-  {cat:'Movement Camera',items:[
-    {keysText:'R',codes:['KeyR'],desc:'فتح الكاميرا',en:'Open Camera'},
-    {keysText:'[',codes:['BracketLeft'],desc:'نقل من كاميرا لكاميرا (شمال)',en:'Prev Camera'},
-    {keysText:']',codes:['BracketRight'],desc:'نقل من كاميرا لكاميرا (يمين)',en:'Next Camera'},
-    {keysText:'\\',codes:['Backslash'],desc:'Track Projection لرؤية الـ Box الأصفر اللي في الصوره',en:'Track Projection'},
-    {keysText:'C',codes:['KeyC'],desc:'هينقلك للـ AV و لو عامل Select علي Object هينقلك عليه',en:'Go To AV Or Object',important:true},
-    {keysText:'W',codes:['KeyW'],desc:'تحرك لقدام',en:'Forward'},
-    {keysText:'S',codes:['KeyS'],desc:'تحرك لورا',en:'Backward'},
-    {keysText:'A',codes:['KeyA'],desc:'تحرك شمال',en:'Left'},
-    {keysText:'D',codes:['KeyD'],desc:'تحرك يمين',en:'Right'},
-    {keysText:'E',codes:['KeyE'],desc:'بتنزل بالرويه الـ 3D لتحت',en:'Move Camera Down',important:true},
-    {keysText:'Q',codes:['KeyQ'],desc:'بتطلع بالرويه الـ 3D لفوق',en:'Move Camera Up',important:true},
-    {keysText:'~',codes:['Backquote'],desc:'تنقل من 2D لـ 3D',en:'Toggle View'},
-  ]},
-  {cat:'Frames',catImportant:true,catBadge:'Daily Use',items:[
-    {keysText:'>',codes:['Period'],desc:'تقدم Frame',en:'Next Frame'},
-    {keysText:'Shift + >',codes:['ShiftRight','Period'],desc:'يقدمك 5 Frames',en:'+5 Frames'},
-    {keysText:'<',codes:['Comma'],desc:'ترجع Frame',en:'Prev Frame'},
-    {keysText:'Shift + <',codes:['ShiftRight','Comma'],desc:'يرجعك 5 Frames',en:'-5 Frames'},
-    {keysText:'K',codes:['KeyK'],desc:'تزود أو تشيل Key Frame',en:'Toggle Keyframe'},
-    {keysText:'Ctrl + >',codes:['ControlRight','Period'],desc:'تقدم لاقرب Key Frame من الـ Frame اللي انت واقف عنده',en:'Jump Forward'},
-    {keysText:'Ctrl + <',codes:['ControlRight','Comma'],desc:'ترجع لاقرب Key Frame من الـ Frame اللي انت واقف عنده',en:'Jump Backward'},
-    {keysText:'Ctrl + Alt + K',codes:['ControlRight','AltRight','KeyK'],desc:'بيشيل كل الـ Key Frames اللي موجوده ما عدا الـ Key Frame اللي انت عنده',en:'Clear Frames'},
-  ]},
-  {cat:'Object',items:[
-    {keysText:'P',codes:['KeyP'],desc:'عشان تعمل الـ Zone',en:'Create Zone',important:true},
-    {keysText:'G',codes:['KeyG'],desc:'هيخلي الـ Box علي قد النقط<span class="note-orange">بيسرع الشغل بس تأكد بعد ما تستخدمه ان النقط جوا الـ Box</span>',en:'Fit To Points',important:true},
-    {keysText:'B',codes:['KeyB'],desc:'عشان تقدر تعمل Box',en:'Create Box',important:true},
-    {keysText:'T',codes:['KeyT'],desc:'تغير الاتجاهات للـ Objects',en:'Set Direction',important:true},
-    {keysText:'Ctrl + C',codes:['ControlLeft','KeyC'],desc:'بتعمل Copy لل Object اللي عامل عليه Select',en:'Copy Object',important:true},
-    {keysText:'Ctrl + V',codes:['ControlLeft','KeyV'],desc:'بتعمل Paste لل Object اللي عملت عليه Copy',en:'Paste Object',important:true},
-    {keysText:'Z',codes:['KeyZ'],desc:'يكبر Size الـ object 10cm من فوق',en:'Scale Up Top',important:true},
-    {keysText:'Alt + Z',codes:['AltLeft','KeyZ'],desc:'يقلل Size الـ object 10cm من فوق',en:'Scale Down Top',important:true},
-    {keysText:'X',codes:['KeyX'],desc:'يكبر Size الـ object 10cm من تحت',en:'Scale Up Bottom',important:true},
-    {keysText:'Alt + X',codes:['AltLeft','KeyX'],desc:'يقلل Size الـ object 10cm من تحت',en:'Scale Down Bottom',important:true},
-    {keysText:'Shift + H',codes:['ShiftLeft','KeyH'],desc:'بتظبط طول الـ Object علي اطول نقطه موجوده واقصر نقطه حتي لو تحت الـ Map<span class="note-red">لو النقط خرجت برا الـ Box في Frame تاني مش معناها نطول الـ Box ـ معناها نحرك الـ Box بنستخدم N / Shift+N</span>',en:'Fit Height',important:true},
-    {keysText:'Shift + F',codes:['ShiftLeft','KeyF'],desc:'بيخلي الـ Box علي سطح الـ Map واعلي نقطه بس',en:'Ground Fit',important:true},
-    {keysText:'Alt + Shift + F',codes:['AltLeft','ShiftLeft','KeyF'],desc:'بيطير الـ Box ومش بيخلي ليه علاقه بالـ Map',en:'Disable Auto Ground',important:true},
-    {keysText:'N',codes:['KeyN'],desc:'ينزل الـ Object كله لتحت',en:'Move Down',important:true},
-    {keysText:'Shift + N',codes:['ShiftRight','KeyN'],desc:'يطلع الـ Object كله لفوق',en:'Move Up',important:true},
-  ]},
-  {cat:'Delete',catImportant:true,catBadge:'Daily Use',items:[
-    {keysText:'Delete',codes:['Delete'],desc:'بيمسح الـ Frames من بعد اخر Keyframe<span class="note-red">لو بين 2 Keyframes مش هيتمسح الـ frames اللي بينها</span>',en:'Delete Frame'},
-    {keysText:'Ctrl + Shift + Delete',codes:['ControlRight','ShiftRight','Delete'],desc:'بيمسح الـ Object',en:'Delete Object'},
-  ]},
-  {cat:'Other',items:[
-    {keysText:'▲',codes:['ArrowUp'],desc:'بيحرك الـ Object لقدام',en:'Forward'},
-    {keysText:'▼',codes:['ArrowDown'],desc:'بيحرك الـ Object لورا',en:'Backward'},
-    {keysText:'◀',codes:['ArrowLeft'],desc:'بيحرك الـ Object لشمال',en:'Left'},
-    {keysText:'▶',codes:['ArrowRight'],desc:'بيحرك الـ Object ليمين',en:'Right'},
-    {keysText:'Shift + ▲',codes:['ShiftRight','ArrowUp'],desc:'بيحرك الـ Object لقدام أسرع',en:'Fast Forward'},
-    {keysText:'Shift + ▼',codes:['ShiftRight','ArrowDown'],desc:'بيحرك الـ Object لورا أسرع',en:'Fast Backward'},
-    {keysText:'Shift + ◀',codes:['ShiftRight','ArrowLeft'],desc:'بيحرك الـ Object لشمال أسرع',en:'Fast Left'},
-    {keysText:'Shift + ▶',codes:['ShiftRight','ArrowRight'],desc:'بيحرك الـ Object ليمين أسرع',en:'Fast Right'},
-    {keysText:'Ctrl + ▶',codes:['ControlRight','ArrowRight'],desc:'بيلف الـ Object ناحية اليمين في الـ 2D',en:'Rotate Right 2D'},
-    {keysText:'Ctrl + ◀',codes:['ControlRight','ArrowLeft'],desc:'بيلف الـ Object ناحية الشمال في الـ 2D',en:'Rotate Left 2D'},
-    {keysText:'Shift + K',codes:['ShiftRight','KeyK'],desc:'بيميل البوكس لقدام 3D',en:'Tilt Forward'},
-    {keysText:'Shift + L',codes:['ShiftRight','KeyL'],desc:'بيميل البوكس لورا 3D',en:'Tilt Backward'},
-    {keysText:'H',codes:['KeyH'],desc:'بيميل البوكس شمال 3D',en:'Tilt Left'},
-    {keysText:'J',codes:['KeyJ'],desc:'بيميل البوكس يمين 3D',en:'Tilt Right'},
-  ]},
+const SHIFTS = [
+  {id:'Morning',name:'Morning'},
+  {id:'Night',name:'Night'},
+  {id:'Over_Night',name:'Overnight'}
 ];
 
-function highlightEnglish(text){
-  return text.replace(/(<[^>]+>)|([A-Za-z0-9][A-Za-z0-9\s\-\.]*)/g, function(match, tag, word){
-    if(tag) return tag;
-    return '<span class="en-word">' + word + '</span>';
-  });
-}
-function buildKeyBadge(keyText){
-  return keyText.split(' + ').map((p,i,a)=>
-    i<a.length-1?`<span class="key-badge">${p}</span><span class="plus-sign">+</span>`:`<span class="key-badge">${p}</span>`
-  ).join('');
+const COLORS = {
+  P:'#42a982',
+  Pass:'#5a86d5',
+  Drop:'#e8a05a',
+  Faild:'#d96572',
+  Pending:'#8996aa'
+};
+
+const number = value =>
+  Number(value || 0).toLocaleString('en-US');
+
+const percent = value =>
+  (Number(value || 0) * 100).toFixed(1) + '%';
+
+const clamp = value =>
+  Math.max(0,Math.min(1,Number(value) || 0));
+
+const LOGO = `
+<svg viewBox="0 0 250 65" role="img"
+aria-label="METI" xmlns="http://www.w3.org/2000/svg">
+<g fill="#FFFFFF">
+<path d="M8 9 H39 L73 43 H42 Z"/>
+<path d="M0 28 H25 L46 49 H21 Z"/>
+</g>
+<text x="84" y="46" fill="#FFFFFF"
+font-family="Arial,Helvetica,sans-serif"
+font-size="44" font-weight="900"
+letter-spacing="-2">METI</text>
+<text x="87" y="57" fill="#FFFFFF"
+font-family="Arial,Helvetica,sans-serif"
+font-size="6" letter-spacing="1.2"
+>MICRO ENGINEERING TECH INC.</text>
+</svg>`;
+
+$('loginLogo').innerHTML = LOGO;
+$('headerLogo').innerHTML = LOGO;
+
+let session = null;
+let requestNumber = 0;
+let latestRequest = 0;
+let authBusy = false;
+let authMode = 'login';
+
+/* THEME */
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+
+  $('themeIcon').textContent =
+    theme === 'dark' ? '☀' : '☾';
+
+  $('themeText').textContent =
+    theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+
+  $('loginThemeToggle').textContent =
+    theme === 'dark' ? '☀ Light Mode' : '☾ Dark Mode';
 }
 
-const listEl=document.getElementById('list');
-const listFrag=document.createDocumentFragment();
-shortcuts.forEach((cat)=>{
-  const section=el('div','cat-section');
-  const label=el('div','cat-label'+(cat.catImportant?' gold':''));
-  label.innerHTML=`<div class="cat-name">${cat.cat}</div>${cat.catBadge?`<span class="cat-badge">${cat.catBadge}</span>`:''}`;
-  section.appendChild(label);
-  const wrapper=el('div','items-wrapper');
-  const wFrag=document.createDocumentFragment();
-  cat.items.forEach(item=>{
-    const div=el('div','shortcut-item'+(item.important?' important':''));
-    const descContent = highlightEnglish(item.desc);
-    const descHtml = item.important
-      ? `<div class="desc"><span class="desc-inner">${descContent}</span></div>`
-      : `<div class="desc">${descContent}</div>`;
-    div.innerHTML=`${descHtml}<span class="en-tag">${item.en}</span><div class="divider"></div><div class="keys-combo">${buildKeyBadge(item.keysText)}</div>`;
-    div.addEventListener('mouseenter',()=>item.codes.forEach(c=>{
-      const k=keyMap[c];if(!k)return;
-      if(k._litOverride)k._litOverride(true);else k.classList.add('lit');
-    }));
-    div.addEventListener('mouseleave',()=>item.codes.forEach(c=>{
-      const k=keyMap[c];if(!k)return;
-      if(k._litOverride)k._litOverride(false);else k.classList.remove('lit');
-    }));
-    wFrag.appendChild(div);
+function toggleTheme() {
+  const next =
+    document.documentElement.dataset.theme === 'dark'
+      ? 'light'
+      : 'dark';
+
+  applyTheme(next);
+
+  try {
+    localStorage.setItem('meti-theme',next);
+  } catch {}
+}
+
+try {
+  applyTheme(
+    localStorage.getItem('meti-theme') || 'light'
+  );
+} catch {
+  applyTheme('light');
+}
+
+$('themeToggle').addEventListener('click',toggleTheme);
+$('loginThemeToggle').addEventListener('click',toggleTheme);
+
+/* API */
+
+function requestData(params) {
+  return new Promise((resolve,reject) => {
+    const callback =
+      'nhDashboardCallback_' +
+      Date.now() + '_' + (++requestNumber);
+
+    const script = document.createElement('script');
+    const url = new URL(API_URL);
+
+    Object.entries(params).forEach(([key,value]) => {
+      if (value !== null && value !== undefined) {
+        url.searchParams.set(key,value);
+      }
+    });
+
+    url.searchParams.set('callback',callback);
+
+    let finished = false;
+
+    const cleanup = () => {
+      delete window[callback];
+      script.remove();
+    };
+
+    const timeout = setTimeout(() => {
+      if (finished) return;
+
+      finished = true;
+      cleanup();
+
+      reject(new Error('Request timed out.'));
+    },30000);
+
+    window[callback] = data => {
+      if (finished) return;
+
+      finished = true;
+      clearTimeout(timeout);
+      cleanup();
+
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      if (finished) return;
+
+      finished = true;
+      clearTimeout(timeout);
+      cleanup();
+
+      reject(new Error('Could not connect to Apps Script.'));
+    };
+
+    script.src = url.toString();
+    document.head.appendChild(script);
   });
-  wrapper.appendChild(wFrag);
-  section.appendChild(wrapper);
-  listFrag.appendChild(section);
+}
+
+/* AUTH UI */
+
+function setAuthMode(mode) {
+  authMode = mode;
+  const signup = mode === 'signup';
+
+  $('signInTab').classList.toggle('active',!signup);
+  $('signUpTab').classList.toggle('active',signup);
+
+  $('authTitle').textContent =
+    signup ? 'Create Account' : 'Welcome Back';
+
+  $('authSubtitle').textContent =
+    signup
+      ? 'Register with your name in the team list'
+      : 'Sign in to your dashboard';
+
+  $('confirmField').hidden = !signup;
+  $('authConfirm').required = signup;
+
+  $('authPassword').autocomplete =
+    signup ? 'new-password' : 'current-password';
+
+  $('authButton').textContent =
+    signup ? 'Sign Up' : 'Sign In';
+
+  $('authMessage').hidden = true;
+  $('authPassword').value = '';
+  $('authConfirm').value = '';
+
+  ['authPassword','authConfirm'].forEach(id => {
+    $(id).type = 'password';
+  });
+
+  document.querySelectorAll(
+    '[data-toggle-password]'
+  ).forEach(button => {
+    button.textContent = '👁';
+    button.setAttribute(
+      'aria-label','Show password'
+    );
+  });
+}
+
+$('signInTab').addEventListener(
+  'click',() => setAuthMode('login')
+);
+
+$('signUpTab').addEventListener(
+  'click',() => setAuthMode('signup')
+);
+
+/* PASSWORD EYES */
+
+document.querySelectorAll(
+  '[data-toggle-password]'
+).forEach(button => {
+  button.addEventListener('click',() => {
+    const input = $(
+      button.dataset.togglePassword
+    );
+
+    const show = input.type === 'password';
+
+    input.type = show ? 'text' : 'password';
+    button.textContent = show ? '🙈' : '👁';
+
+    button.setAttribute(
+      'aria-label',
+      show ? 'Hide password' : 'Show password'
+    );
+  });
 });
-listEl.appendChild(listFrag);
 
-const activeKeys = new Set();
+function authMessage(message,success=false) {
+  const el = $('authMessage');
 
-window.addEventListener('keydown',e=>{
-  activeKeys.add(e.code);
-  const k = keyMap[e.code];
-  if(k){
-    if(k._litOverride) k._litOverride(true);
-    else k.classList.add('lit');
+  el.textContent = message;
+  el.classList.toggle('success',success);
+  el.hidden = false;
+}
+
+function shiftName(shift) {
+  return shift === 'Over_Night'
+    ? 'Overnight'
+    : shift;
+}
+
+/* SIGN UP / SIGN IN */
+
+$('authForm').addEventListener('submit',async event => {
+  event.preventDefault();
+
+  if (authBusy) return;
+
+  const name = $('authName').value.trim();
+  const password = $('authPassword').value;
+  const confirm = $('authConfirm').value;
+  const signup = authMode === 'signup';
+
+  if (!name || !password || (signup && !confirm)) {
+    authMessage('Complete all fields.');
+    return;
   }
-  [['led0','NumLock'],['led1','CapsLock'],['led2','ScrollLock']].forEach(([id,mod])=>{
-    document.getElementById(id)?.classList.toggle('on',e.getModifierState(mod));
-  });
-});
-window.addEventListener('keyup',e=>{
-  activeKeys.delete(e.code);
-  const k = keyMap[e.code];
-  if(k){
-    if(k._litOverride) k._litOverride(false);
-    else k.classList.remove('lit');
+
+  if (signup && password !== confirm) {
+    authMessage('Passwords do not match.');
+    return;
+  }
+
+  authBusy = true;
+  $('authButton').disabled = true;
+  $('authButton').textContent =
+    signup ? 'Creating Account...' : 'Signing In...';
+
+  $('authMessage').hidden = true;
+
+  try {
+    const result = await requestData(
+      signup
+        ? {
+            action:'signup',
+            name,
+            password,
+            confirm
+          }
+        : {
+            action:'login',
+            name,
+            password
+          }
+    );
+
+    if (!result.ok) {
+      throw new Error(
+        result.error || 'Request failed.'
+      );
+    }
+
+    if (signup) {
+      setAuthMode('login');
+      $('authName').value = name;
+
+      authMessage(
+        'Account created successfully. Please Sign In.',
+        true
+      );
+    } else {
+      if (!result.token || !result.user) {
+        throw new Error('Invalid login response.');
+      }
+
+      session = {
+        token:result.token,
+        user:result.user
+      };
+
+      $('authPassword').value = '';
+      openDashboard(result.user);
+    }
+
+  } catch(error) {
+    authMessage(error.message);
+
+  } finally {
+    authBusy = false;
+    $('authButton').disabled = false;
+
+    $('authButton').textContent =
+      authMode === 'signup'
+        ? 'Sign Up'
+        : 'Sign In';
   }
 });
 
-function scaleKeyboard(){
-  const shell = document.getElementById('shell');
-  const inner = shell.closest('.kb-inner');
-  const available = inner.clientWidth - 32;
-  const naturalWidth = shell.scrollWidth;
-  const scale = Math.min(1, available / naturalWidth);
-  shell.style.transform = `scale(${scale})`;
-  shell.style.transformOrigin = 'top center';
-  shell.style.marginBottom = `-${Math.round(shell.scrollHeight * (1 - scale))}px`;
+/* DASHBOARD ACCESS */
+
+function openDashboard(user) {
+  $('authScreen').hidden = true;
+  $('dashboard').hidden = false;
+
+  const admin = user.admin;
+  const member = user.role === 'Training Member';
+
+  const canCompare =
+    admin || user.role === 'Shift Supervisor';
+
+  $('userInfo').textContent =
+    user.name + ' · ' + user.role + ' · ' +
+    (admin ? 'All Shifts' : shiftName(user.shift));
+
+  $('shiftFilterField').hidden = !admin;
+
+  $('shift').value =
+    admin ? 'all' : user.shift;
+
+  $('managementKpis').hidden = member;
+  $('statusCards').hidden = member;
+  $('memberView').hidden = !member;
+  $('charts').hidden = member;
+  $('comparison').hidden = !canCompare;
+
+  $('charts').classList.toggle(
+    'single',!canCompare
+  );
+
+  $('comparisonSubtitle').textContent =
+    admin
+      ? 'Comparison for the selected period'
+      : 'Performance rates across shifts';
+
+  $('comparisonTag').textContent =
+    admin ? 'ALL SHIFTS' : 'RATES ONLY';
+
+  $('period').value = 'this-week';
+  $('customDates').classList.remove('show');
+
+  loadDashboard();
 }
 
-function updateClock(){
-  const el2 = document.getElementById('clock');
-  if(el2) el2.textContent = new Date().toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
-}
-updateClock();
-setInterval(updateClock, 1000);
+function logoutLocal() {
+  latestRequest++;
+  session = null;
 
-scaleKeyboard();
-window.addEventListener('resize', scaleKeyboard);
+  $('dashboard').hidden = true;
+  $('authScreen').hidden = false;
+
+  $('shiftChart').replaceChildren();
+  $('authPassword').value = '';
+  $('authConfirm').value = '';
+
+  setAuthMode('login');
+}
+
+$('logoutButton').addEventListener('click',() => {
+  const old = session;
+  logoutLocal();
+
+  if (old) {
+    requestData({
+      action:'logout',
+      token:old.token
+    }).catch(() => {});
+  }
+});
+
+/* CONNECTION */
+
+function setConnection(state) {
+  const dot = $('connectionDot');
+  dot.className = 'connection-dot';
+
+  if (state === 'online') {
+    dot.classList.add('online');
+    $('connectionText').textContent = 'Connected';
+  } else if (state === 'offline') {
+    dot.classList.add('offline');
+    $('connectionText').textContent = 'Connection Error';
+  } else {
+    $('connectionText').textContent = 'Connecting...';
+  }
+}
+
+/* ERRORS */
+
+function showError(message) {
+  $('error').textContent = message;
+  $('error').classList.add('show');
+}
+
+function clearError() {
+  $('error').textContent = '';
+  $('error').classList.remove('show');
+}
+
+/* FILTERS */
+
+function getParams() {
+  const period = $('period').value;
+  const params = {period};
+
+  if (period === 'custom') {
+    const from = $('from').value;
+    const to = $('to').value;
+
+    if (!from || !to) {
+      throw new Error('Choose both dates.');
+    }
+
+    if (from > to) {
+      throw new Error(
+        'From Date cannot be after To Date.'
+      );
+    }
+
+    params.from = from;
+    params.to = to;
+  }
+
+  return params;
+}
+
+/* RENDER */
+
+function setStatus(valueId,barId,count,rate) {
+  $(valueId).textContent =
+    number(count) + ' · ' + percent(rate);
+
+  $(barId).style.width =
+    clamp(rate) * 100 + '%';
+}
+
+function renderDonut(data) {
+  const c = data.counts;
+  const total = data.total;
+
+  $('donutTotal').textContent = number(total);
+
+  if (!total) {
+    $('donut').style.background = 'var(--soft)';
+    return;
+  }
+
+  const p = c.P / total * 100;
+  const pass = c.Pass / total * 100;
+  const drop = c['Drop Out'] / total * 100;
+  const faild = c.Faild / total * 100;
+
+  const a = p;
+  const b = a + pass;
+  const d = b + drop;
+  const e = d + faild;
+
+  $('donut').style.background = `
+    conic-gradient(
+      ${COLORS.P} 0% ${a}%,
+      ${COLORS.Pass} ${a}% ${b}%,
+      ${COLORS.Drop} ${b}% ${d}%,
+      ${COLORS.Faild} ${d}% ${e}%,
+      ${COLORS.Pending} ${e}% 100%
+    )
+  `;
+}
+
+function renderManagement(data) {
+  $('total').textContent = number(data.total);
+
+  $('productionRate').textContent =
+    percent(data.rates.P);
+
+  $('failedRate').textContent =
+    percent(data.rates.Faild);
+
+  $('dropOutRate').textContent =
+    percent(data.rates['Drop Out']);
+
+  $('statusProdValue').textContent =
+    number(data.counts.P) + ' · ' + percent(data.rates.P);
+
+  $('statusPassValue').textContent =
+    number(data.counts.Pass) + ' · ' + percent(data.rates.Pass);
+
+  $('statusFailValue').textContent =
+    number(data.counts.Faild) + ' · ' + percent(data.rates.Faild);
+
+  $('statusDropValue').textContent =
+    number(data.counts['Drop Out']) + ' · ' + percent(data.rates['Drop Out']);
+
+  $('statusPendingValue').textContent =
+    number(data.counts.Pending);
+
+  setStatus(
+    'pValue','pBar',
+    data.counts.P,data.rates.P
+  );
+
+  setStatus(
+    'passValue','passBar',
+    data.counts.Pass,data.rates.Pass
+  );
+
+  setStatus(
+    'dropValue','dropBar',
+    data.counts['Drop Out'],
+    data.rates['Drop Out']
+  );
+
+  setStatus(
+    'failValue','failBar',
+    data.counts.Faild,data.rates.Faild
+  );
+
+  const pendingShare = data.total
+    ? data.counts.Pending / data.total
+    : 0;
+
+  setStatus(
+    'pendingValue','pendingBar',
+    data.counts.Pending,pendingShare
+  );
+
+  renderDonut(data);
+}
+
+function renderMember(data) {
+  $('memberTotal').textContent =
+    number(data.total);
+
+  $('memberP').textContent =
+    number(data.counts.P);
+
+  $('memberPass').textContent =
+    number(data.counts.Pass);
+
+  $('memberDrop').textContent =
+    number(data.counts['Drop Out']);
+
+  $('memberFail').textContent =
+    number(data.counts.Faild);
+
+  $('memberPending').textContent =
+    number(data.counts.Pending);
+}
+
+function renderPeriod(data) {
+  const shift = data.shift === 'all'
+    ? 'All Shifts'
+    : shiftName(data.shift);
+
+  const period = data.period === 'all-time'
+    ? 'All Time'
+    : data.from + ' → ' + data.to;
+
+  $('periodInfo').textContent =
+    shift + ' | ' + period;
+
+  $('updatedAt').textContent =
+    'Updated: ' + data.updatedAt;
+}
+
+/* ADMIN COMPARISON */
+
+function renderAdminComparison(reports) {
+  const container = $('shiftChart');
+  container.replaceChildren();
+
+  if (!reports.some(r => r.completed)) {
+    container.textContent =
+      'No completed training data for this period.';
+    return;
+  }
+
+  reports.forEach(data => {
+    const c = data.counts;
+    const completed = data.completed;
+
+    const row = document.createElement('div');
+    row.className = 'shift-row';
+
+    const head = document.createElement('div');
+    head.className = 'shift-head';
+
+    const name = document.createElement('strong');
+    name.textContent = shiftName(data.shift);
+
+    const total = document.createElement('span');
+    total.textContent =
+      number(data.total) + ' New Hires';
+
+    head.append(name,total);
+
+    const stack = document.createElement('div');
+    stack.className = 'stack';
+
+    const stats = document.createElement('div');
+    stats.className = 'shift-stats';
+
+    [
+      ['Production',c.P,COLORS.P],
+      ['Pass',c.Pass,COLORS.Pass],
+      ['Drop Out',c['Drop Out'],COLORS.Drop],
+      ['Faild',c.Faild,COLORS.Faild]
+    ].forEach(([label,count,color]) => {
+      const part = document.createElement('div');
+      part.className = 'stack-part';
+      part.style.background = color;
+      part.style.width =
+        (completed ? count / completed * 100 : 0) + '%';
+
+      part.title = label + ': ' + number(count);
+      stack.appendChild(part);
+
+      const stat = document.createElement('span');
+      stat.textContent =
+        label + ': ' + number(count);
+      stats.appendChild(stat);
+    });
+
+    row.append(head,stack,stats);
+    container.appendChild(row);
+  });
+}
+
+/* SHIFT SUPERVISOR COMPARISON */
+
+function renderSimpleComparison(reports,ownShift) {
+  const container = $('shiftChart');
+  container.replaceChildren();
+
+  const labels = [
+    ['P','Production',COLORS.P],
+    ['Pass','Pass',COLORS.Pass],
+    ['Drop Out','Drop Out',COLORS.Drop],
+    ['Faild','Faild',COLORS.Faild]
+  ];
+
+  reports.forEach(report => {
+    const row = document.createElement('div');
+
+    row.className = 'compare-row' +
+      (report.shift === ownShift ? ' own' : '');
+
+    const heading = document.createElement('div');
+    heading.className = 'compare-title';
+
+    const name = document.createElement('strong');
+    name.textContent = shiftName(report.shift);
+
+    const indicator = document.createElement('span');
+    indicator.textContent =
+      report.shift === ownShift
+        ? 'Your Shift'
+        : 'Comparison';
+
+    heading.append(name,indicator);
+    row.appendChild(heading);
+
+    labels.forEach(([key,label,color]) => {
+      const value = clamp(report.rates[key]);
+
+      const item = document.createElement('div');
+      item.className = 'compare-stat';
+
+      const head = document.createElement('div');
+      head.className = 'compare-stat-head';
+
+      const title = document.createElement('span');
+      title.textContent = label;
+
+      const result = document.createElement('strong');
+      result.textContent = percent(value);
+
+      head.append(title,result);
+
+      const track = document.createElement('div');
+      track.className = 'compare-track';
+
+      const fill = document.createElement('div');
+      fill.className = 'compare-fill';
+
+      fill.style.background = color;
+      fill.style.width = value * 100 + '%';
+
+      track.appendChild(fill);
+      item.append(head,track);
+      row.appendChild(item);
+    });
+
+    container.appendChild(row);
+  });
+}
+
+/* LOAD */
+
+async function loadDashboard() {
+  if (!session) return;
+
+  const activeSession = session;
+  const requestId = ++latestRequest;
+  const user = activeSession.user;
+
+  clearError();
+  setConnection('loading');
+
+  let filters;
+
+  try {
+    filters = getParams();
+  } catch(error) {
+    showError(error.message);
+    setConnection('offline');
+    return;
+  }
+
+  const selectedShift = user.admin
+    ? $('shift').value
+    : user.shift;
+
+  const refresh = $('refresh');
+
+  refresh.disabled = true;
+  refresh.textContent = 'Loading...';
+
+  ['shift','period','from','to'].forEach(
+    id => $(id).disabled = true
+  );
+
+  try {
+    const mainPromise = requestData({
+      ...filters,
+      token:activeSession.token,
+      shift:selectedShift
+    });
+
+    const canCompare =
+      user.admin ||
+      user.role === 'Shift Supervisor';
+
+    const comparisonPromise = canCompare
+      ? requestData({
+          ...filters,
+          action:'comparison',
+          token:activeSession.token
+        })
+      : Promise.resolve(null);
+
+    const [main,comparison] = await Promise.all([
+      mainPromise,
+      comparisonPromise
+    ]);
+
+    if (
+      requestId !== latestRequest ||
+      session !== activeSession
+    ) return;
+
+    if (!main.ok) {
+      throw new Error(
+        main.error || 'Unable to load dashboard.'
+      );
+    }
+
+    if (comparison && !comparison.ok) {
+      throw new Error(
+        comparison.error || 'Unable to load comparison.'
+      );
+    }
+
+    renderPeriod(main);
+
+    if (user.role === 'Training Member') {
+      renderMember(main);
+    } else {
+      renderManagement(main);
+    }
+
+    if (comparison) {
+      if (user.admin) {
+        renderAdminComparison(comparison.shifts);
+      } else {
+        renderSimpleComparison(
+          comparison.shifts,user.shift
+        );
+      }
+    }
+
+    setConnection('online');
+
+  } catch(error) {
+    if (
+      requestId !== latestRequest ||
+      session !== activeSession
+    ) return;
+
+    showError(error.message);
+    setConnection('offline');
+
+  } finally {
+    if (
+      requestId === latestRequest &&
+      session === activeSession
+    ) {
+      refresh.disabled = false;
+      refresh.textContent = '↻ Refresh';
+
+      ['shift','period','from','to'].forEach(
+        id => $(id).disabled = false
+      );
+    }
+  }
+}
+
+/* EVENTS */
+
+$('shift').addEventListener(
+  'change',loadDashboard
+);
+
+$('refresh').addEventListener(
+  'click',loadDashboard
+);
+
+$('period').addEventListener('change',() => {
+  const custom = $('period').value === 'custom';
+
+  $('customDates').classList.toggle(
+    'show',custom
+  );
+
+  if (!custom) loadDashboard();
+});
+
+['from','to'].forEach(id => {
+  $(id).addEventListener('change',() => {
+    if (
+      $('period').value === 'custom' &&
+      $('from').value &&
+      $('to').value
+    ) {
+      loadDashboard();
+    }
+  });
+});
+
+setAuthMode('login');
 </script>
 </body>
 </html>
