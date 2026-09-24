@@ -1412,17 +1412,18 @@ function renderManagement(data) {
   $('dropOutRate').textContent =
     percent(data.rates['Drop Out']);
 
+  /* Status cards row: count only, no percentage */
   $('statusProdValue').textContent =
-    number(data.counts.P) + ' · ' + percent(data.rates.P);
+    number(data.counts.P);
 
   $('statusPassValue').textContent =
-    number(data.counts.Pass) + ' · ' + percent(data.rates.Pass);
+    number(data.counts.Pass);
 
   $('statusFailValue').textContent =
-    number(data.counts.Faild) + ' · ' + percent(data.rates.Faild);
+    number(data.counts.Faild);
 
   $('statusDropValue').textContent =
-    number(data.counts['Drop Out']) + ' · ' + percent(data.rates['Drop Out']);
+    number(data.counts['Drop Out']);
 
   $('statusPendingValue').textContent =
     number(data.counts.Pending);
@@ -1750,13 +1751,10 @@ async function loadDashboard() {
 
 /* EVENTS */
 
-$('shift').addEventListener(
-  'change',loadDashboard
-);
-
-$('refresh').addEventListener(
-  'click',loadDashboard
-);
+/* Filters only stage the choice - nothing auto-loads.
+   Loading always waits for the Refresh button, so the
+   user can change Shift + Period (+ custom dates) together
+   and only fire one request when ready. */
 
 $('period').addEventListener('change',() => {
   const custom = $('period').value === 'custom';
@@ -1764,21 +1762,11 @@ $('period').addEventListener('change',() => {
   $('customDates').classList.toggle(
     'show',custom
   );
-
-  if (!custom) loadDashboard();
 });
 
-['from','to'].forEach(id => {
-  $(id).addEventListener('change',() => {
-    if (
-      $('period').value === 'custom' &&
-      $('from').value &&
-      $('to').value
-    ) {
-      loadDashboard();
-    }
-  });
-});
+$('refresh').addEventListener(
+  'click',loadDashboard
+);
 
 setAuthMode('login');
 </script>
